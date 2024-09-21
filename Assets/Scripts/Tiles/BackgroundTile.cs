@@ -6,6 +6,23 @@ public class BackgroundTile : ITile
 {
     // spritss
     Sprite currentSprite;
+    Sprite lava;
+    Sprite dark;
+    Sprite[] walls;
+    int nWalls = 10;
+
+    public void Initialize()
+    {
+        Sprite[] tilesAll = Resources.LoadAll<Sprite>("BackgroundTiles");
+        foreach(Sprite s in tilesAll)
+        {
+            for(int i = 0; i < nWalls; i++)
+            {
+               //
+            }
+        }
+
+    }
 
     // TileBase overrides    // TileBase Overrides
     // StartUp is called on the first frame of the running Scene.

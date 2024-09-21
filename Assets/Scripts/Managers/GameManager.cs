@@ -9,7 +9,19 @@ public class GameManager : MonoBehaviour
 {
     public static event Action NextGameTick;
 
-    static Grid grid;
+    // grids & tilemaps
+    // where the levels are displayed
+
+    static Grid actualGrid;
+    static Tilemap levelGroundActual;
+    static Tilemap levelBackgroundActual;
+
+    // level blueprints
+    static Grid levelGrid;
+    static Tilemap levelGroundBlueprint;
+    static Tilemap levelBackgroundBlueprint;
+
+
 
     static GameObject deathScreen;
 
@@ -24,17 +36,16 @@ public class GameManager : MonoBehaviour
 
     static Dictionary<Vector3Int, Item> activeItems = new();
 
-    // how the level starts
-    static Tilemap currentLevelBlueprint;
-    // where it is now
-    static Tilemap currentLevel;
 
-    static Tilemap background;
 
     // Start is called before the first frame update
     void Awake()
     {
-        grid = GameObject.FindWithTag("Grid").GetComponent<Grid>();
+        actualGrid = GameObject.FindWithTag("Acutal_Grid").GetComponent<Grid>();
+        levelGroundActual = actualGrid.transform.Find("Actual_Level").GetComponent<Tilemap>();
+        levelBackgroundActual = actualGrid.transform.Find("Actual_Background").GetComponent<Tilemap>();
+
+
         player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
         deathScreen = GameObject.FindGameObjectWithTag("Death");
 
@@ -48,9 +59,6 @@ public class GameManager : MonoBehaviour
 
         Variation.InitializeVariationSprites();
 
-        currentLevel = grid.transform.Find("Actual_Level").GetComponent<Tilemap>();
-        currentLevelBlueprint = grid.transform.Find("Level1").GetComponent<Tilemap>();
-        background = new Tilemap();
     }
 
     private void Start()
@@ -63,15 +71,14 @@ public class GameManager : MonoBehaviour
 
     public static void StartNewLevel(int levelNb)
     {
-        // some logic that enables the level and disables the others
-        
+
         int durability;
         bool breakable;
         GroundTile.GroundTileType gtt = GroundTile.GroundTileType.NULL;
         // level loading logic...
         // select the appropriate grid/tilemap
         // foreach(Vector3Int loc in tilemap.
-        foreach(Vector3Int loc in currentLevelBlueprint.cellBounds.allPositionsWithin)
+        foreach(Vector3Int loc in levelGroundBlueprint.cellBounds.allPositionsWithin)
         {
             durability = 0;
             breakable = false;
@@ -80,7 +87,7 @@ public class GameManager : MonoBehaviour
             GroundTile gt = ScriptableObject.CreateInstance<GroundTile>();
             gt.Initialize();
             
-            TileBase tb = currentLevelBlueprint.GetTile(loc);
+            TileBase tb = levelGroundBlueprint.GetTile(loc);
             
             if(!tb) continue;
 
@@ -100,11 +107,8 @@ public class GameManager : MonoBehaviour
                 case "Crystal":
                     gtt = GroundTile.GroundTileType.CRYSTAL;
                     break;
-                case "Trap_Open":
-                    gtt = GroundTile.GroundTileType.TRAP;
-                    break;
-                case "Trap_Closed":
-                    gtt = GroundTile.GroundTileType.TRAP;
+                case "Indestructible":
+                    gtt = GroundTile.GroundTileType.END;
                     break;
             }
 
@@ -114,11 +118,11 @@ public class GameManager : MonoBehaviour
             }
 
             Debug.Log("In Game Manager, tile type is: " + gtt + "\n and tb.name = " + tb.name);
-            currentLevel.SetTile(loc, gt);
+            levelGroundActual.SetTile(loc, gt);
 
-            ((GroundTile) currentLevel.GetTile(loc)).SetValues(durability, breakable, gtt);
+            ((GroundTile) levelGroundActual.GetTile(loc)).SetValues(durability, breakable, gtt);
 
-            currentLevel.RefreshTile(loc);
+            levelGroundActual.RefreshTile(loc);
 
         }
 
@@ -127,8 +131,23 @@ public class GameManager : MonoBehaviour
         GameObject[] items = GameObject.FindGameObjectsWithTag("Item");
         foreach (GameObject item in items)
         {
-            activeItems.Add(grid.WorldToCell(item.transform.position), item.GetComponent<Item>());
+            activeItems.Add(actualGrid.WorldToCell(item.transform.position), item.GetComponent<Item>());
         }
+    }
+
+    private static void updateTilemaps(int levelNb)
+    {
+        updateTilemaps(levelNb);
+        string levelGridName = "Level" + levelNb;
+        levelGrid = GameObject.Find(levelGridName).GetComponent<Grid>();
+        levelGroundBlueprint = levelGrid.transform.Find(levelGridName + "_Ground").GetComponent<Tilemap>();
+        levelBackgroundBlueprint = levelGrid.transform.Find(levelGridName + "_Background").GetComponent<Tilemap>();
+
+        levelGroundActual.ClearAllTiles();
+        levelGroundActual.RefreshAllTiles();
+
+        levelBackgroundActual.ClearAllTiles();
+        levelBackgroundActual.RefreshAllTiles();
     }
 
     public void TriggerNextGameTick()
@@ -145,7 +164,7 @@ public class GameManager : MonoBehaviour
 
         // CellToWorld retrns bottom-left corner
 
-        Vector3Int newCellLocation = grid.WorldToCell(pos) + new Vector3Int(dir.x, dir.y, 0);
+        Vector3Int newCellLocation = actualGrid.WorldToCell(pos) + new Vector3Int(dir.x, dir.y, 0);
 
         // Stop player from moving when paused
         if (paused)
@@ -153,8 +172,8 @@ public class GameManager : MonoBehaviour
 
         // Whenever a player steps on lava, they Die™
         // Debug.Log("Current level tile: " + newCellLocation);
-        Debug.Log("Current level tile: " + currentLevel.GetTile(new Vector3Int(0, 0)));
-        if (currentLevel.GetTile(newCellLocation) == null)
+        Debug.Log("Current level tile: " + levelGroundActual.GetTile(new Vector3Int(0, 0)));
+        if (levelGroundActual.GetTile(newCellLocation) == null)
             Die();
 
         if (activeItems.ContainsKey(newCellLocation))
@@ -164,7 +183,7 @@ public class GameManager : MonoBehaviour
             activeItems.Remove(newCellLocation);
         }
 
-        return grid.CellToWorld(newCellLocation) + new Vector3(0.5f, 0.5f, 0);
+        return actualGrid.CellToWorld(newCellLocation) + new Vector3(0.5f, 0.5f, 0);
     }
 
     static void Die()
@@ -179,7 +198,7 @@ public class GameManager : MonoBehaviour
 
     public static Vector3 AlignToGrid(Vector3 pos)
     {
-        return grid.CellToWorld(grid.WorldToCell(pos)) + new Vector3(0.5f, 0.5f, 0);
+        return actualGrid.CellToWorld(actualGrid.WorldToCell(pos)) + new Vector3(0.5f, 0.5f, 0);
     }
 
     void IncrementWind()

@@ -10,6 +10,7 @@ TagManager:
   - Queue
   - Ground
   - Death
+  - Actual_Grid
   layers:
   - Default
   - TransparentFX

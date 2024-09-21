@@ -12,8 +12,6 @@ public class GroundTile: ITile
     GroundTileType groundTileType = GroundTileType.NULL;
     bool flipX = false;
     bool flipY = false;
-    int rotationAngle = 0;
-    bool open = false;
 
     // spritss
     Sprite currentSprite;
@@ -36,7 +34,6 @@ public class GroundTile: ITile
         // Sprite tileRedMine = Resources.Load<Sprite>("Sprites/RedMine");
 
         Sprite[] tilesAll = Resources.LoadAll<Sprite>("GroundTiles");
-        Debug.Log("Tiles All: " + tilesAll);
 
         rockTiles = new Sprite[4][]; // [index = normal, x flip, y flip, xy flip] [actual tile according to durability]
         for(int i = 0; i < 4; i++)
@@ -76,14 +73,10 @@ public class GroundTile: ITile
                     break;
                 
             }
-
-            //Debug.Log("The Tile at " + position + " has name : " + s.name);
             
         }
-
         flipX = Random.Range(0f,1f) <= 0.5f? true: false;
         flipY = Random.Range(0f,1f) <= 0.5f? true: false;
-        rotationAngle = 90 * Mathf.FloorToInt(Random.Range(0, 3.99999f));
     }
 
     // TileBase overrides    // TileBase Overrides
@@ -106,9 +99,6 @@ public class GroundTile: ITile
                 else if(flipX) index = 1;
                 else if(flipY) index = 2;
 
-                Debug.Log("End of switch, index: " + index);
-
-                Debug.Log(rockTiles);
                 if(this.durability > 0) currentSprite = rockTiles[index][this.durability - 1];
                 break;
             case GroundTileType.CRYSTAL:
@@ -118,15 +108,6 @@ public class GroundTile: ITile
                 currentSprite = null;
                 break;
         }
-
-        string name = currentSprite? currentSprite.name : "Null";
-        Debug.Log("Current Sprite Name: " + name + " at " + position);
-
-        Debug.Log("End of get, rot: " + rotationAngle);
-
-
-        tileData.transform.SetTRS(position, Quaternion.Euler(0, 0, rotationAngle) , Vector3.one);
-        // change tileData.sprite to appropriate sprite depending on what has happened
 
         tileData.sprite = currentSprite;
 
@@ -151,8 +132,8 @@ public class GroundTile: ITile
     public enum GroundTileType
     {
         ROCK,
-        TRAP,
         CRYSTAL,
+        END,
         NULL
     }
 
