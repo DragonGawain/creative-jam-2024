@@ -36,8 +36,8 @@ public class Variation
 
     public Variation(Variation variation)
     {
-        this.variationType = type;
-        this.size = size;
+        this.variationType = variation.GetVariationType();
+        this.size = variation.GetSize();
     }
 
     public VariationType GetVariationType()
