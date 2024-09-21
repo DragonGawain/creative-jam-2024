@@ -40,6 +40,10 @@ public class PlayerController : MonoBehaviour
         
     }
 
+    public Vector2 GetMovementInput() {
+        return movementInput;
+    }
+
     void Move(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
         Debug.Log("perf");
