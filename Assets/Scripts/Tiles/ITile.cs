@@ -28,9 +28,7 @@ public abstract class ITile: TileBase
     public abstract override void RefreshTile(Vector3Int position, ITilemap tilemap);
     
     // don't really need this, do we?
-    
 
-    public abstract void clearTile();
 
     protected Dictionary<Directions, Vector3Int> directionDict = new Dictionary<Directions, Vector3Int>{
         {Directions.NORTH, new Vector3Int(0,1,0)},

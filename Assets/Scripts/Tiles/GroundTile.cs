@@ -5,11 +5,16 @@ using UnityEngine.Tilemaps;
 public class GroundTile: ITile
 {
     // fields
-    private int durability;
-    private bool breakble;
+    int durability;
+    bool breakble;
+    GroundTileType groundTileType;
 
     // spritss
     Sprite currentSprite;
+    Sprite[] rockTiles;
+    int nRockTiles = 5;
+
+    Sprite crystalTile;
 
     // TileBase overrides    // TileBase Overrides
     // StartUp is called on the first frame of the running Scene.
@@ -21,13 +26,50 @@ public class GroundTile: ITile
         // Sprite[] tilesAll = Resources.LoadAll<Sprite>("Sprites/TileSprites");
         // Sprite tileRedMine = Resources.Load<Sprite>("Sprites/RedMine");
 
+        Sprite[] tilesAll = Resources.LoadAll<Sprite>("Sprites/Ground");
+        Sprite[] rockTiles = new Sprite[nRockTiles];
+
+        foreach(Sprite s in tilesAll)
+        {
+            for(int i = 0; i < nRockTiles; i++)
+            {
+                if(s.name.Equals("Rock" + i))
+                {
+                    rockTiles[i] = s;
+                    groundTileType = GroundTileType.ROCK;
+                }
+            }
+
+            switch(s.name)
+            {
+                case "Crystal":
+                    crystalTile = s;
+                    break;
+                
+            }
+            
+        }
+
         return true;
     }
     // Retrieves any tile rendering data from the scripted tile.
     // TileData: https://docs.unity3d.com/ScriptReference/Tilemaps.TileData.html
     public override void GetTileData(Vector3Int position, ITilemap tilemap, ref TileData tileData) 
     {
+
+        // choose currentSprite
+        switch(groundTileType)
+        {
+            case GroundTileType.ROCK:
+                currentSprite = rockTiles[this.durability];
+                break;
+        }
+
+
+
+
         // change tileData.sprite to appropriate sprite depending on what has happened
+        tileData.sprite = currentSprite;
     }
     // This method is called when the tile is refreshed.
     public override void RefreshTile(Vector3Int position, ITilemap tilemap) 
@@ -37,19 +79,21 @@ public class GroundTile: ITile
     
     public bool isBreakable() { return breakble; }
     
-    public void decreaseDurability(int n)
+    public int decreaseDurability(int n)
     {
         // instead of destroying the tile, just set the tile in this location to be null, and make a tile in the 
         // "holes" tilemap in this location. Or, just keep it all in one tilemap and change an "isBroken" flag
         // to true or something like that..
         if(breakble) durability -= n;
-        // if(durability <= 0) destroyTile();
+        return durability;
     }
 
-    public override void clearTile()
+    private enum GroundTileType
     {
-        currentSprite = null;
-        // refresh??
+        ROCK,
+        TRAP,
+        CRYSTAL
     }
+
 
 }
