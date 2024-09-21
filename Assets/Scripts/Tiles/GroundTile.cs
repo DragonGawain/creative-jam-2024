@@ -8,6 +8,9 @@ public class GroundTile: ITile
     int durability;
     bool breakble;
     GroundTileType groundTileType;
+    bool flipX = false;
+    bool flipY = false;
+    int rotationAngle = 0;
 
     // spritss
     Sprite currentSprite;
@@ -27,7 +30,7 @@ public class GroundTile: ITile
         // Sprite tileRedMine = Resources.Load<Sprite>("Sprites/RedMine");
 
         Sprite[] tilesAll = Resources.LoadAll<Sprite>("Sprites/Ground");
-        Sprite[] rockTiles = new Sprite[nRockTiles];
+        Sprite[][] rockTiles = new Sprite[4][];
 
         foreach(Sprite s in tilesAll)
         {
@@ -35,7 +38,22 @@ public class GroundTile: ITile
             {
                 if(s.name.Equals("Rock" + i))
                 {
-                    rockTiles[i] = s;
+                    rockTiles[0][i] = s;
+                    groundTileType = GroundTileType.ROCK;
+                }
+                else if(s.name.Equals("Rock" + i + "_flip_X"))
+                {
+                    rockTiles[1][i] = s;
+                    groundTileType = GroundTileType.CRYSTAL;
+                }
+                else if(s.name.Equals("Rock" + i + "_flip_Y"))
+                {
+                    rockTiles[2][i] = s;
+                    groundTileType = GroundTileType.ROCK;
+                }
+                else if(s.name.Equals("Rock" + i + "_flip_XY"))
+                {
+                    rockTiles[3][i] = s;
                     groundTileType = GroundTileType.ROCK;
                 }
             }
@@ -62,6 +80,9 @@ public class GroundTile: ITile
         {
             case GroundTileType.ROCK:
                 currentSprite = rockTiles[this.durability];
+                break;
+            case GroundTileType.CRYSTAL:
+                currentSprite = crystalTile;
                 break;
         }
 
