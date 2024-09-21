@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 public class BackgroundTile : ITile
 {
     // spritss
-    Sprite currentSprite;;
+    Sprite currentSprite;
 
     // TileBase overrides    // TileBase Overrides
     // StartUp is called on the first frame of the running Scene.
@@ -17,7 +17,7 @@ public class BackgroundTile : ITile
         // Sprite[] tilesAll = Resources.LoadAll<Sprite>("Sprites/TileSprites");
         // Sprite tileRedMine = Resources.Load<Sprite>("Sprites/RedMine");
 
-        // return true
+        return true;
     }
     // Retrieves any tile rendering data from the scripted tile.
     // TileData: https://docs.unity3d.com/ScriptReference/Tilemaps.TileData.html
@@ -29,5 +29,10 @@ public class BackgroundTile : ITile
     public override void RefreshTile(Vector3Int position, ITilemap tilemap) 
     {
         // don't really need this, do we?
+    }
+
+    public override void clearTile()
+    {
+
     }
 }

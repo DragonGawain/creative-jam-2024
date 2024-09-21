@@ -21,7 +21,7 @@ public class GroundTile: ITile
         // Sprite[] tilesAll = Resources.LoadAll<Sprite>("Sprites/TileSprites");
         // Sprite tileRedMine = Resources.Load<Sprite>("Sprites/RedMine");
 
-        // return true
+        return true;
     }
     // Retrieves any tile rendering data from the scripted tile.
     // TileData: https://docs.unity3d.com/ScriptReference/Tilemaps.TileData.html
@@ -35,14 +35,20 @@ public class GroundTile: ITile
         // don't really need this, do we?
     }
 
-    public bool isBreakable() { return isBreakable; }
+    // why do you have a getter for a public variable?
+    
+    public bool isBreakable { return breakble; }
+    
     public void decreaseDurability(int n)
     {
+        // instead of destroying the tile, just set the tile in this location to be null, and make a tile in the 
+        // "holes" tilemap in this location. Or, just keep it all in one tilemap and change an "isBroken" flag
+        // to true or something like that..
         if(breakble) durability -= n;
-        if(durability <= 0) destroyTile();
+        // if(durability <= 0) destroyTile();
     }
 
-    public clearTile()
+    public override void clearTile()
     {
         currentSprite = null;
         // refresh??

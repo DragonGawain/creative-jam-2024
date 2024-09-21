@@ -20,17 +20,24 @@ public enum VariationType
 public class Variation
 {
     VariationType variationType;
+    int size;
 
-    // Start is called before the first frame update
-    void Start()
+    public Variation(VariationType type)
     {
-        //
+        this.variationType = type;
+        this.size = 1;
     }
 
-    // Update is called once per frame
-    void Update()
+    public Variation(VariationType type, int size)
     {
-        //
+        this.variationType = type;
+        this.size = size;
+    }
+
+    public Variation(Variation variation)
+    {
+        this.variationType = type;
+        this.size = size;
     }
 
     public VariationType GetVariationType()
@@ -38,13 +45,21 @@ public class Variation
         return variationType;
     }
 
+    public int GetSize()
+    {
+        return size;
+    }
+
     public void SetVariationType(VariationType type)
     {
         variationType = type;
     }
 
-    public Variation(VariationType type)
+    public void SetSize(int size)
     {
-        this.variationType = type;
+        this.size = size;
     }
+
+
+    
 }

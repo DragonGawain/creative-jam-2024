@@ -81,8 +81,11 @@ public class PlayerController : MonoBehaviour
 
     public void Enqueue(Variation variation)
     {
-        variations.Enqueue(variation);
-        variationTypes.Enqueue(variation.GetVariationType());
+        for (int i = 0; i < variation.GetSize(); i++)
+        {
+            variations.Enqueue(variation);
+            variationTypes.Enqueue(variation.GetVariationType());   
+        }
 
         // if the queue if overflowing, dequeue until the queue is no longer overfull
         if (variations.Count > queueSize)
@@ -103,10 +106,10 @@ public class PlayerController : MonoBehaviour
     public void Dequeue(int n = 1)
     {
         for (int i = 0; i < n; i++)
+        {
             variations.Dequeue();
-
-        for (int i = 0; i < n; i++)
             variationTypes.Dequeue();
+        }
     }
 
     // TEMP DEBUG METHODS (though like, we can just, use these I guess...)
