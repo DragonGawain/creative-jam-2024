@@ -19,20 +19,33 @@ public enum VariationType
 // monobehaviour to hold an instance of a Variation.. :shrug:
 public class Variation
 {
+
+    static Dictionary<VariationType, int> typeSizes = new Dictionary<VariationType, int>() {
+        {VariationType.MOVE_UP, 1},
+        {VariationType.MOVE_DOWN, 1},
+        {VariationType.MOVE_LEFT, 1},
+        {VariationType.MOVE_RIGHT, 1},
+        {VariationType.WIND_UP, 1},
+        {VariationType.WIND_DOWN, 1},
+        {VariationType.WIND_LEFT, 1},
+        {VariationType.WIND_RIGHT, 1},
+    };
+
     VariationType variationType;
     int size;
 
     public Variation(VariationType type)
     {
         this.variationType = type;
-        this.size = 1;
+        this.size = typeSizes[type];
     }
 
-    public Variation(VariationType type, int size)
-    {
-        this.variationType = type;
-        this.size = size;
-    }
+    // we shouldn't really be using this one
+    // public Variation(VariationType type, int size)
+    // {
+    //     this.variationType = type;
+    //     this.size = size;
+    // }
 
     public Variation(Variation variation)
     {

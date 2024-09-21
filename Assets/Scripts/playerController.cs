@@ -47,22 +47,22 @@ public class PlayerController : MonoBehaviour
         // move right
         if (movementInput.x > 0 && variationTypes.Contains(VariationType.MOVE_RIGHT))
         {
-            transform.position = gameManager.Move(transform.position, new Vector2Int(1, 0));
+            transform.position = GameManager.Move(transform.position, new Vector2Int(1, 0));
         }
         // move left
         else if (movementInput.x < 0 && variationTypes.Contains(VariationType.MOVE_LEFT))
         {
-            transform.position = gameManager.Move(transform.position, new Vector2Int(-1, 0));
+            transform.position = GameManager.Move(transform.position, new Vector2Int(-1, 0));
         }
         // move up
         else if (movementInput.y > 0 && variationTypes.Contains(VariationType.MOVE_UP))
         {
-            transform.position = gameManager.Move(transform.position, new Vector2Int(0, 1));
+            transform.position = GameManager.Move(transform.position, new Vector2Int(0, 1));
         }
         // move down
         else if (movementInput.y < 0 && variationTypes.Contains(VariationType.MOVE_DOWN))
         {
-            transform.position = gameManager.Move(transform.position, new Vector2Int(0, -1));
+            transform.position = GameManager.Move(transform.position, new Vector2Int(0, -1));
         }
 
         gameManager.TriggerNextGameTick();
