@@ -31,8 +31,5 @@ public class BackgroundTile : ITile
         // don't really need this, do we?
     }
 
-    public override void clearTile()
-    {
 
-    }
 }
