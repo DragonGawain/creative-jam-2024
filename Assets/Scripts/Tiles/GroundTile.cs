@@ -34,10 +34,8 @@ public class GroundTile: ITile
     {
         // don't really need this, do we?
     }
-
-    // why do you have a getter for a public variable?
     
-    public bool isBreakable { return breakble; }
+    public bool isBreakable() { return breakble; }
     
     public void decreaseDurability(int n)
     {
