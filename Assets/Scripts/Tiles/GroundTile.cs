@@ -81,9 +81,9 @@ public class GroundTile: ITile
             
         }
 
-        flipX = Random.Range(0,1) <= 0.5f? true: false;
-        flipY = Random.Range(0,1) <= 0.5f? true: false;
-        rotationAngle = 90 * Mathf.FloorToInt(Random.Range(0, 3.99999f));    
+        flipX = Random.Range(0f,1f) <= 0.5f? true: false;
+        flipY = Random.Range(0f,1f) <= 0.5f? true: false;
+        rotationAngle = 90 * Mathf.FloorToInt(Random.Range(0, 3.99999f));
     }
 
     // TileBase overrides    // TileBase Overrides
@@ -106,6 +106,8 @@ public class GroundTile: ITile
                 else if(flipX) index = 1;
                 else if(flipY) index = 2;
 
+                Debug.Log("End of switch, index: " + index);
+
                 Debug.Log(rockTiles);
                 if(this.durability > 0) currentSprite = rockTiles[index][this.durability - 1];
                 break;
@@ -119,6 +121,8 @@ public class GroundTile: ITile
 
         string name = currentSprite? currentSprite.name : "Null";
         Debug.Log("Current Sprite Name: " + name + " at " + position);
+
+        Debug.Log("End of get, rot: " + rotationAngle);
 
 
         tileData.transform.SetTRS(position, Quaternion.Euler(0, 0, rotationAngle) , Vector3.one);
