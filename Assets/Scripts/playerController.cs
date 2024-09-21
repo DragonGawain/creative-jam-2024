@@ -23,8 +23,6 @@ public class PlayerController : MonoBehaviour
 
     Queue variations = new();
 
-    bool canMove = true;
-
     // Start is called before the first frame update
     void Awake()
     {
@@ -44,8 +42,9 @@ public class PlayerController : MonoBehaviour
 
     void Move(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
-        if (!canMove)
-            return;
+        Debug.Log("perf");
+
+
 
         movementInput = inputs.Player.Move.ReadValue<Vector2>();
         if (movementInput.x > 0)
@@ -69,16 +68,15 @@ public class PlayerController : MonoBehaviour
             transform.position = gameManager.Move(transform.position, new Vector2Int(0,-1));
         }
 
-        canMove = false;
 
         gameManager.TriggerNextGameTick();
+
 
     }
 
     void EndMove(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
-        if (inputs.Player.Move.ReadValue<Vector2>().magnitude == 0)
-            canMove = true;
+        Debug.Log("cance");
     }
 
     void OnDestroy()
