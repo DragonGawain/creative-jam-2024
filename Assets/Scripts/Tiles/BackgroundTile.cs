@@ -13,14 +13,16 @@ public class BackgroundTile : ITile
 
     public void Initialize()
     {
+        walls = new Sprite[GameManager.nWalls];
         Sprite[] tilesAll = Resources.LoadAll<Sprite>("BackgroundTiles");
         foreach(Sprite s in tilesAll)
         {
             for(int i = 0; i < GameManager.nWalls; i++)
             {
-               if(s.name.Equals("Wall" + i))
+               if(s.name.Equals("wall" + i))
                {
                     walls[i] = s;
+                    isWall = true;
                }
             }
             switch(s.name)
@@ -40,7 +42,7 @@ public class BackgroundTile : ITile
     {
         for(int i = 0; i < GameManager.nWalls; i++)
         {
-            if(name.Equals("Wall" + i))
+            if(name.Equals("wall" + i))
             {
                 currentSprite = walls[i];
                 isWall = true;

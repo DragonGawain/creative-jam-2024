@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     static Tilemap levelGroundBlueprint;
     static Tilemap levelBackgroundBlueprint;
 
-    public static int nWalls = 10;
+    public static int nWalls = 24;
 
 
     static GameObject deathScreen;
