@@ -89,6 +89,16 @@ public class PlayerController : MonoBehaviour
                 Dequeue();
     }
 
+    public Queue<Variation> GetVariationQueue()
+    {
+        return variations;
+    }
+
+    public Queue<VariationType> GetVariationTypesQueue()
+    {
+        return variationTypes;
+    }
+
     public void Dequeue(int n = 1)
     {
         for (int i = 0; i < n; i++)
@@ -97,6 +107,8 @@ public class PlayerController : MonoBehaviour
         for (int i = 0; i < n; i++)
             variationTypes.Dequeue();
     }
+
+    // TEMP DEBUG METHODS (though like, we can just, use these I guess...)
 
     public void EnqueueUp()
     {
@@ -116,5 +128,25 @@ public class PlayerController : MonoBehaviour
     public void EnqueueLeft()
     {
         Enqueue(new Variation(VariationType.MOVE_LEFT));
+    }
+
+    public void EnqueueWindUp()
+    {
+        Enqueue(new Variation(VariationType.WIND_UP));
+    }
+
+    public void EnqueueWindRight()
+    {
+        Enqueue(new Variation(VariationType.WIND_RIGHT));
+    }
+
+    public void EnqueueWindDown()
+    {
+        Enqueue(new Variation(VariationType.WIND_DOWN));
+    }
+
+    public void EnqueueWindLeft()
+    {
+        Enqueue(new Variation(VariationType.WIND_LEFT));
     }
 }
