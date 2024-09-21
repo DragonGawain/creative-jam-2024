@@ -98,7 +98,7 @@ public class PlayerController : MonoBehaviour
                 Dequeue();
 
         // After we're done with the queue operations, let's manipulate the visuals!
-        UIManager.UpdateQueueVisuals(variations.ToArray());
+        // UIManager.UpdateQueueVisuals(variations.ToArray());
     }
 
     public Queue<Variation> GetVariationQueue()

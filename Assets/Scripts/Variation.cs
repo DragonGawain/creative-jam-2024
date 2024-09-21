@@ -12,7 +12,8 @@ public enum VariationType
     WIND_UP,
     WIND_DOWN,
     WIND_LEFT,
-    WIND_RIGHT
+    WIND_RIGHT,
+    MIMIC,
 }
 
 // I don't think this needs to be a monobehaviour? It not being a monobehaviour would mean
@@ -22,14 +23,16 @@ public class Variation
 {
 
     static Dictionary<VariationType, int> typeSizes = new Dictionary<VariationType, int>() {
+        {VariationType.NULL, 1},
         {VariationType.MOVE_UP, 1},
         {VariationType.MOVE_DOWN, 1},
         {VariationType.MOVE_LEFT, 1},
         {VariationType.MOVE_RIGHT, 1},
-        {VariationType.WIND_UP, 1},
-        {VariationType.WIND_DOWN, 1},
-        {VariationType.WIND_LEFT, 1},
-        {VariationType.WIND_RIGHT, 1},
+        {VariationType.WIND_UP, 2},
+        {VariationType.WIND_DOWN, 2},
+        {VariationType.WIND_LEFT, 2},
+        {VariationType.WIND_RIGHT, 2},
+        {VariationType.MIMIC, 3},
     };
 
 
