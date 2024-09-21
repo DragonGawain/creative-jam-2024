@@ -9,16 +9,51 @@ public class BackgroundTile : ITile
     Sprite lava;
     Sprite dark;
     Sprite[] walls;
-    int nWalls = 10;
+    bool isWall = false;
 
     public void Initialize()
     {
         Sprite[] tilesAll = Resources.LoadAll<Sprite>("BackgroundTiles");
         foreach(Sprite s in tilesAll)
         {
-            for(int i = 0; i < nWalls; i++)
+            for(int i = 0; i < GameManager.nWalls; i++)
             {
-               //
+               if(s.name.Equals("Wall" + i))
+               {
+                    walls[i] = s;
+               }
+            }
+            switch(s.name)
+            {
+                case "Lava":
+                    lava = s;
+                    break;
+                case "Dark":
+                    dark = s;
+                    break;
+            }
+        }
+
+    }
+
+    public void SetSprite(string name)
+    {
+        for(int i = 0; i < GameManager.nWalls; i++)
+        {
+            if(name.Equals("Wall" + i))
+            {
+                currentSprite = walls[i];
+                isWall = true;
+            }
+
+            switch(name)
+            {
+                case "Lava":
+                    currentSprite = lava;
+                    break;
+                case "Dark":
+                    currentSprite = dark;
+                    break;
             }
         }
 
@@ -41,6 +76,7 @@ public class BackgroundTile : ITile
     public override void GetTileData(Vector3Int position, ITilemap tilemap, ref TileData tileData) 
     {
         // change tileData.sprite to appropriate sprite depending on what has happened
+        tileData.sprite = currentSprite;
     }
     // This method is called when the tile is refreshed.
     public override void RefreshTile(Vector3Int position, ITilemap tilemap) 

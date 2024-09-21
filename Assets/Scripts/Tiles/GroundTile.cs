@@ -19,7 +19,6 @@ public class GroundTile: ITile
     Sprite crystalTile;
     public void SetValues(int durability, bool breakable, GroundTileType gtt)
     {
-        Debug.Log("I'm setting values!");
         this.durability = durability;
         this.breakable = breakable;
         this.groundTileType = gtt;
@@ -43,7 +42,6 @@ public class GroundTile: ITile
 
         foreach(Sprite s in tilesAll)
         {   
-            //Debug.Log("I am placing Sprite " + s.name);
             groundTileType = GroundTileType.NULL;
 
             for(int i = 0; i < tilesAll.Length; i++)
@@ -89,7 +87,6 @@ public class GroundTile: ITile
     // TileData: https://docs.unity3d.com/ScriptReference/Tilemaps.TileData.html
     public override void GetTileData(Vector3Int position, ITilemap tilemap, ref TileData tileData) 
     {
-        Debug.Log(groundTileType);
         // choose currentSprite
         switch(groundTileType)
         {

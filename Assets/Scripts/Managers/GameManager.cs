@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     static Tilemap levelGroundBlueprint;
     static Tilemap levelBackgroundBlueprint;
 
+    public static int nWalls = 10;
 
 
     static GameObject deathScreen;
@@ -41,8 +42,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        actualGrid = GameObject.FindWithTag("Acutal_Grid").GetComponent<Grid>();
-        levelGroundActual = actualGrid.transform.Find("Actual_Level").GetComponent<Tilemap>();
+        actualGrid = GameObject.Find("Actual_Grid").GetComponent<Grid>();
+        levelGroundActual = actualGrid.transform.Find("Actual_Ground").GetComponent<Tilemap>();
         levelBackgroundActual = actualGrid.transform.Find("Actual_Background").GetComponent<Tilemap>();
 
 
@@ -53,7 +54,7 @@ public class GameManager : MonoBehaviour
             Death screen is active by default and hidden on wake
             to be able to fetch a reference to it
         */
-        deathScreen.SetActive(false);
+        //deathScreen.SetActive(false);
 
         NextGameTick += IncrementWind;
 
@@ -63,7 +64,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        StartNewLevel(0);
+        StartNewLevel(1);
     }
 
     // Update is called once per frame
@@ -72,12 +73,50 @@ public class GameManager : MonoBehaviour
     public static void StartNewLevel(int levelNb)
     {
 
+        updateTilemaps(levelNb);
+
+        loadGround();
+        loadBackground();
+        
+
+        activeItems.Clear();
+
+        GameObject[] items = GameObject.FindGameObjectsWithTag("Item");
+        foreach (GameObject item in items)
+        {
+            activeItems.Add(actualGrid.WorldToCell(item.transform.position), item.GetComponent<Item>());
+        }
+
+        // Reset pause screen if necessary
+        if (paused)
+        {
+            paused = false;
+            deathScreen.SetActive(false);
+            player.transform.position = new Vector3(0.5f, 0.5f, 0);
+        }
+    }
+
+    private static void updateTilemaps(int levelNb)
+    {
+        string levelGridName = "Level" + levelNb;
+        levelGrid = GameObject.Find(levelGridName).GetComponent<Grid>();
+        levelGroundBlueprint = levelGrid.transform.Find(levelGridName + "_Ground").GetComponent<Tilemap>();
+        levelBackgroundBlueprint = levelGrid.transform.Find(levelGridName + "_Background").GetComponent<Tilemap>();
+
+        levelGroundActual.ClearAllTiles();
+        levelGroundActual.RefreshAllTiles();
+
+        levelBackgroundActual.ClearAllTiles();
+        levelBackgroundActual.RefreshAllTiles();
+    }
+
+    private static void loadGround()
+    {
         int durability;
         bool breakable;
         GroundTile.GroundTileType gtt = GroundTile.GroundTileType.NULL;
-        // level loading logic...
-        // select the appropriate grid/tilemap
-        // foreach(Vector3Int loc in tilemap.
+        
+
         foreach(Vector3Int loc in levelGroundBlueprint.cellBounds.allPositionsWithin)
         {
             durability = 0;
@@ -117,7 +156,6 @@ public class GameManager : MonoBehaviour
                 gtt = GroundTile.GroundTileType.CRYSTAL;
             }
 
-            Debug.Log("In Game Manager, tile type is: " + gtt + "\n and tb.name = " + tb.name);
             levelGroundActual.SetTile(loc, gt);
 
             ((GroundTile) levelGroundActual.GetTile(loc)).SetValues(durability, breakable, gtt);
@@ -125,37 +163,24 @@ public class GameManager : MonoBehaviour
             levelGroundActual.RefreshTile(loc);
 
         }
-
-        activeItems.Clear();
-
-        GameObject[] items = GameObject.FindGameObjectsWithTag("Item");
-        foreach (GameObject item in items)
-        {
-            activeItems.Add(actualGrid.WorldToCell(item.transform.position), item.GetComponent<Item>());
-        }
-
-        // Reset pause screen if necessary
-        if (paused)
-        {
-            paused = false;
-            deathScreen.SetActive(false);
-            player.transform.position = new Vector3(0.5f, 0.5f, 0);
-        }
     }
 
-    private static void updateTilemaps(int levelNb)
+    private static void loadBackground()
     {
-        updateTilemaps(levelNb);
-        string levelGridName = "Level" + levelNb;
-        levelGrid = GameObject.Find(levelGridName).GetComponent<Grid>();
-        levelGroundBlueprint = levelGrid.transform.Find(levelGridName + "_Ground").GetComponent<Tilemap>();
-        levelBackgroundBlueprint = levelGrid.transform.Find(levelGridName + "_Background").GetComponent<Tilemap>();
+        foreach(Vector3Int loc in levelBackgroundBlueprint.cellBounds.allPositionsWithin)
+        {
+            BackgroundTile bgt = ScriptableObject.CreateInstance<BackgroundTile>();
+            bgt.Initialize();
+            TileBase tb = levelBackgroundBlueprint.GetTile(loc);
 
-        levelGroundActual.ClearAllTiles();
-        levelGroundActual.RefreshAllTiles();
+            if(!tb) continue;
 
-        levelBackgroundActual.ClearAllTiles();
-        levelBackgroundActual.RefreshAllTiles();
+            levelBackgroundActual.SetTile(loc, bgt);
+            ((BackgroundTile) levelBackgroundActual.GetTile(loc)).SetSprite(tb.name);
+
+            levelBackgroundActual.RefreshTile(loc);
+        }
+       
     }
 
     public void TriggerNextGameTick()
