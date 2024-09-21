@@ -20,6 +20,13 @@ public class GameManager : MonoBehaviour
 
     static Dictionary<Vector3Int, Item> activeItems = new();
 
+    // how the level starts
+    static Tilemap currentLevelBlueprint;
+    // where it is now
+    static Tilemap currentLevel;
+
+    static Tilemap background;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -28,6 +35,10 @@ public class GameManager : MonoBehaviour
         NextGameTick += IncrementWind;
 
         Variation.InitializeVariationSprites();
+
+        currentLevel = grid.transform.Find("Actual_Level").GetComponent<Tilemap>();
+        currentLevelBlueprint = grid.transform.Find("Level1").GetComponent<Tilemap>();
+        background = new Tilemap();
     }
 
     private void Start()
@@ -41,6 +52,63 @@ public class GameManager : MonoBehaviour
     public static void StartNewLevel(int levelNb)
     {
         // some logic that enables the level and disables the others
+        
+        int durability;
+        bool breakable;
+        GroundTile.GroundTileType gtt = GroundTile.GroundTileType.NULL;
+        // level loading logic...
+        // select the appropriate grid/tilemap
+        // foreach(Vector3Int loc in tilemap.
+        foreach(Vector3Int loc in currentLevelBlueprint.cellBounds.allPositionsWithin)
+        {
+            durability = 0;
+            breakable = false;
+            gtt = GroundTile.GroundTileType.NULL;
+
+            GroundTile gt = ScriptableObject.CreateInstance<GroundTile>();
+            gt.Initialize();
+            
+            TileBase tb = currentLevelBlueprint.GetTile(loc);
+            
+            if(!tb) continue;
+
+            // check if rock
+            for(int i = 0; i <= 3; i++)
+            {
+                if(tb.name[..5].Equals("Rock" + i))
+                {
+                    durability = i + 1;
+                    breakable = true;
+                    gtt = GroundTile.GroundTileType.ROCK;
+                }
+            }
+
+            switch(tb.name)
+            {
+                case "Crystal":
+                    gtt = GroundTile.GroundTileType.CRYSTAL;
+                    break;
+                case "Trap_Open":
+                    gtt = GroundTile.GroundTileType.TRAP;
+                    break;
+                case "Trap_Closed":
+                    gtt = GroundTile.GroundTileType.TRAP;
+                    break;
+            }
+
+            if(tb.name.Equals("Crystal"))
+            {
+                gtt = GroundTile.GroundTileType.CRYSTAL;
+            }
+
+            Debug.Log("In Game Manager, tile type is: " + gtt + "\n and tb.name = " + tb.name);
+            currentLevel.SetTile(loc, gt);
+
+            ((GroundTile) currentLevel.GetTile(loc)).SetValues(durability, breakable, gtt);
+
+            currentLevel.RefreshTile(loc);
+
+        }
 
         activeItems.Clear();
 
