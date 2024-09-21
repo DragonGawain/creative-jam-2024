@@ -2,6 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum VariationType {
+    MOVE_UP,
+    MOVE_DOWN,
+    MOVE_LEFT,
+    MOVE_RIGHT,
+    WIND_UP,
+    WIND_DOWN,
+    WIND_LEFT,
+    WIND_RIGHT
+}
+
 public class PlayerController : MonoBehaviour
 {
 
@@ -9,6 +20,8 @@ public class PlayerController : MonoBehaviour
     Vector2 movementInput;
 
     GameManager gameManager; // could just serialize this?
+
+    Queue variations = new();
 
     bool canMove = true;
 
@@ -37,23 +50,23 @@ public class PlayerController : MonoBehaviour
         movementInput = inputs.Player.Move.ReadValue<Vector2>();
         if (movementInput.x > 0)
         {
-            transform.position = gameManager.Move(transform.position, new Vector2Int(1,0));
             // move right
+            transform.position = gameManager.Move(transform.position, new Vector2Int(1,0));
         }
         else if (movementInput.x < 0)
         {
-            transform.position = gameManager.Move(transform.position, new Vector2Int(-1,0));
             // move left
+            transform.position = gameManager.Move(transform.position, new Vector2Int(-1,0));
         }
         else if (movementInput.y > 0)
         {
-            transform.position = gameManager.Move(transform.position, new Vector2Int(0,1));
             // move up
+            transform.position = gameManager.Move(transform.position, new Vector2Int(0,1));
         }
         else if (movementInput.y < 0)
         {
-            transform.position = gameManager.Move(transform.position, new Vector2Int(0,-1));
             // move down
+            transform.position = gameManager.Move(transform.position, new Vector2Int(0,-1));
         }
 
         canMove = false;
