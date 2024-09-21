@@ -9,6 +9,7 @@ TagManager:
   - Item
   - Queue
   - Ground
+  - Death
   layers:
   - Default
   - TransparentFX

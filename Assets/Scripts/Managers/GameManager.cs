@@ -11,6 +11,10 @@ public class GameManager : MonoBehaviour
 
     static Grid grid;
 
+    static GameObject deathScreen;
+
+    static bool paused = false;
+
     static PlayerController player;
 
     public static int windCounter = 0;
@@ -32,6 +36,14 @@ public class GameManager : MonoBehaviour
     {
         grid = GameObject.FindWithTag("Grid").GetComponent<Grid>();
         player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+        deathScreen = GameObject.FindGameObjectWithTag("Death");
+
+        /*
+            Death screen is active by default and hidden on wake
+            to be able to fetch a reference to it
+        */
+        deathScreen.SetActive(false);
+
         NextGameTick += IncrementWind;
 
         Variation.InitializeVariationSprites();
@@ -135,6 +147,16 @@ public class GameManager : MonoBehaviour
 
         Vector3Int newCellLocation = grid.WorldToCell(pos) + new Vector3Int(dir.x, dir.y, 0);
 
+        // Stop player from moving when paused
+        if (paused)
+            return pos;
+
+        // Whenever a player steps on lava, they Die™
+        // Debug.Log("Current level tile: " + newCellLocation);
+        Debug.Log("Current level tile: " + currentLevel.GetTile(new Vector3Int(0, 0)));
+        if (currentLevel.GetTile(newCellLocation) == null)
+            Die();
+
         if (activeItems.ContainsKey(newCellLocation))
         {
             player.Enqueue(activeItems[newCellLocation].GetVariation());
@@ -143,6 +165,16 @@ public class GameManager : MonoBehaviour
         }
 
         return grid.CellToWorld(newCellLocation) + new Vector3(0.5f, 0.5f, 0);
+    }
+
+    static void Die()
+    {
+        // Die™
+        Debug.Log("Dying™");
+
+        // Show death ui
+        deathScreen.SetActive(true);
+        paused = true;
     }
 
     public static Vector3 AlignToGrid(Vector3 pos)
@@ -169,4 +201,5 @@ public class GameManager : MonoBehaviour
                 player.transform.position = Move(player.transform.position, new Vector2Int(1, 0));
         }
     }
+
 }
