@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
     // );
 
     [SerializeField, Range(2, 10)]
-    int queueSize = 3;
+    int queueSize = 6;
 
     bool isGhost = false;
 
