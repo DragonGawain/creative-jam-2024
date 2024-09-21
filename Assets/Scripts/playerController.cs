@@ -20,6 +20,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField, Range(2, 10)]
     int queueSize = 3;
 
+    
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -91,6 +93,9 @@ public class PlayerController : MonoBehaviour
         if (variations.Count > queueSize)
             for (int i = variations.Count; i > queueSize; i--)
                 Dequeue();
+
+        // After we're done with the queue operations, let's manipulate the visuals!
+        UIManager.UpdateQueueVisuals(variations.ToArray());
     }
 
     public Queue<Variation> GetVariationQueue()

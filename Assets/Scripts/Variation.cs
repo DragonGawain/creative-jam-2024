@@ -4,6 +4,7 @@ using UnityEngine;
 
 public enum VariationType
 {
+    NULL,
     MOVE_UP,
     MOVE_DOWN,
     MOVE_LEFT,
@@ -31,8 +32,18 @@ public class Variation
         {VariationType.WIND_RIGHT, 1},
     };
 
+
     VariationType variationType;
     int size;
+
+    static Dictionary<int, Sprite> sprites = new();
+
+    public static void InitializeVariationSprites()
+    {
+        // fill the sprite dictionary with the sprites, along with a key to identify what the sprite is
+        // ex: move up HEAD, wind left HEAD, wind ledt BODY (for extending the lenght of the thing)
+    }
+
 
     public Variation(VariationType type)
     {

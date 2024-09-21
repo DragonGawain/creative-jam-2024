@@ -26,6 +26,8 @@ public class GameManager : MonoBehaviour
         grid = GameObject.FindWithTag("Grid").GetComponent<Grid>();
         player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
         NextGameTick += IncrementWind;
+
+        Variation.InitializeVariationSprites();
     }
 
     private void Start()
