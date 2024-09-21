@@ -89,7 +89,10 @@ public class PlayerController : MonoBehaviour
         for (int i = 0; i < variation.GetSize(); i++)
         {
             variations.Enqueue(variation);
-            variationTypes.Enqueue(variation.GetVariationType());   
+            if (i == variation.GetSize() - 1) // last one is the head
+                variationTypes.Enqueue(variation.GetVariationType());
+            else
+                variationTypes.Enqueue(Variation.GetAlternateTypes()[variation.GetVariationType()]);
         }
 
         // if the queue if overflowing, dequeue until the queue is no longer overfull
@@ -98,7 +101,7 @@ public class PlayerController : MonoBehaviour
                 Dequeue();
 
         // After we're done with the queue operations, let's manipulate the visuals!
-        // UIManager.UpdateQueueVisuals(variations.ToArray());
+        UIManager.UpdateQueueVisuals(variationTypes.ToArray());
     }
 
     public Queue<Variation> GetVariationQueue()
@@ -160,5 +163,10 @@ public class PlayerController : MonoBehaviour
     public void EnqueueWindLeft()
     {
         Enqueue(new Variation(VariationType.WIND_LEFT));
+    }
+
+    public void EnqueueMimic()
+    {
+        Enqueue(new Variation(VariationType.MIMIC));
     }
 }
