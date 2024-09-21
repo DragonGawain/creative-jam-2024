@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     Queue<VariationType> variationTypes = new();
 
     // new Queue<VariationType>(
-    //     new List<VariationType> { VariationType.MOVE_UP, VariationType.MOVE_RIGHT }
+    //     new List<VariationType> { VariationType.MOVE_UP, VariationType.MOVE_RIGHT, VariationType.MOVE_DOWN, VariationType.MOVE_LEFT }
     // );
 
     [SerializeField, Range(2, 10)]
