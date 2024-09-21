@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 [CreateAssetMenu]
-public class ItemTile : WorldTile
+public class ItemTile : ITile
 {
     // spritss
     Sprite currentSprite;;

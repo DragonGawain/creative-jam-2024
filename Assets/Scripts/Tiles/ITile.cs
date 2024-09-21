@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class WorldTile: TileBase
+public class ITile: TileBase
 {
     protected ColliderType colliderType = ColliderType.Sprite;
     // TileBase Overrides

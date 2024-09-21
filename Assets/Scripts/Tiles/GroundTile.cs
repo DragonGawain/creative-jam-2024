@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 [CreateAssetMenu]
-public class GroundTile: WorldTile
+public class GroundTile: ITile
 {
     // fields
     private int durability;
