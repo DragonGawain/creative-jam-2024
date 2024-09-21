@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
 
     GameManager gameManager; // could just serialize this?
 
+    // make queues static?
     Queue<Variation> variations = new();
     Queue<VariationType> variationTypes = new();
 
