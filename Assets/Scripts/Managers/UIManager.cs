@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
@@ -55,6 +56,15 @@ public class UIManager : MonoBehaviour
             }
         }
 
+    }
+
+    public void OnStartButton()
+    {
+    }
+
+    public void OnQuitButton()
+    {
+        Application.Quit();
     }
 
     // Update is called once per frame
