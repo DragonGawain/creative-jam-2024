@@ -114,12 +114,12 @@ public class GameManager : MonoBehaviour
     {
         int durability;
         bool breakable;
-        GroundTile.GroundTileType gtt = GroundTile.GroundTileType.NULL;
+        GroundTile.GroundTileType gtt;
         
 
         foreach(Vector3Int loc in levelGroundBlueprint.cellBounds.allPositionsWithin)
         {
-            durability = 0;
+            durability = 1;
             breakable = false;
             gtt = GroundTile.GroundTileType.NULL;
 
@@ -133,7 +133,7 @@ public class GameManager : MonoBehaviour
             // check if rock
             for(int i = 0; i <= 3; i++)
             {
-                if(tb.name[..5].Equals("Rock" + i))
+                if(tb.name.Length > 4 && tb.name[..5].Equals("Rock" + i))
                 {
                     durability = i + 1;
                     breakable = true;
@@ -146,14 +146,9 @@ public class GameManager : MonoBehaviour
                 case "Crystal":
                     gtt = GroundTile.GroundTileType.CRYSTAL;
                     break;
-                case "Indestructible":
+                case "End":
                     gtt = GroundTile.GroundTileType.END;
                     break;
-            }
-
-            if(tb.name.Equals("Crystal"))
-            {
-                gtt = GroundTile.GroundTileType.CRYSTAL;
             }
 
             levelGroundActual.SetTile(loc, gt);

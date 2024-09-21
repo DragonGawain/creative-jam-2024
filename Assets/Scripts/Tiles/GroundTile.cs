@@ -17,6 +17,7 @@ public class GroundTile: ITile
     Sprite currentSprite;
     Sprite[][] rockTiles;
     Sprite crystalTile;
+    Sprite endTile;
     public void SetValues(int durability, bool breakable, GroundTileType gtt)
     {
         this.durability = durability;
@@ -69,6 +70,10 @@ public class GroundTile: ITile
                 case "Crystal":
                     crystalTile = s;
                     break;
+                case "End":
+                    endTile = s;
+                    break;
+
                 
             }
             
@@ -100,6 +105,9 @@ public class GroundTile: ITile
                 break;
             case GroundTileType.CRYSTAL:
                 currentSprite = crystalTile;
+                break;
+            case GroundTileType.END:
+                currentSprite = endTile;
                 break;
             default:
                 currentSprite = null;
