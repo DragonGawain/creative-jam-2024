@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
 
     public Vector3 Move(Vector3 pos, Vector2Int dir)
     {
+        // CellToWorld retrns bottom-left corner
         return grid.CellToWorld(grid.WorldToCell(pos) + new Vector3Int(dir.x, dir.y, 0))
             + new Vector3(0.5f, 0.5f, 0);
     }
