@@ -128,4 +128,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff9a434b6d505411580ffb680f532a8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  queueSize: 3
+  queueSize: 6

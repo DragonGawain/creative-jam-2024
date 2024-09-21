@@ -46,8 +46,6 @@ public class PlayerController : MonoBehaviour
 
     void Move(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
-        Debug.Log("perf");
-
         movementInput = inputs.Player.Move.ReadValue<Vector2>();
         // move right
         if (movementInput.x > 0 && variationTypes.Contains(VariationType.MOVE_RIGHT))
@@ -75,7 +73,6 @@ public class PlayerController : MonoBehaviour
 
     void EndMove(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
-        Debug.Log("cance");
     }
 
     void OnDestroy()
