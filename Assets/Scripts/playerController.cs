@@ -20,7 +20,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField, Range(2, 10)]
     int queueSize = 3;
 
-    
+    bool isGhost = false;
+
+    int ghostCharges = 6;
+
 
     // Start is called before the first frame update
     void Awake()
