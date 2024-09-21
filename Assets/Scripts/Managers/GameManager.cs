@@ -133,6 +133,14 @@ public class GameManager : MonoBehaviour
         {
             activeItems.Add(actualGrid.WorldToCell(item.transform.position), item.GetComponent<Item>());
         }
+
+        // Reset pause screen if necessary
+        if (paused)
+        {
+            paused = false;
+            deathScreen.SetActive(false);
+            player.transform.position = new Vector3(0.5f, 0.5f, 0);
+        }
     }
 
     private static void updateTilemaps(int levelNb)
