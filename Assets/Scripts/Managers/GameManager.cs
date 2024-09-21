@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
     {
         // Vector3Int cellLoc = grid.WorldToCell(pos);
         // int hp = (WorldTile)tilemap.GetTile(cellLoc).decreaseDurability();
-        // if (hp == 0)
+        // if (hp <= 0)
         //     destroy(tile);
 
         // CellToWorld retrns bottom-left corner
