@@ -106,6 +106,7 @@ public class GameManager : MonoBehaviour
     static void initializeFirstLoad()
     {
         deathScreen = GameObject.FindGameObjectWithTag("Death");
+        deathScreen.transform.parent.GetChild(2).gameObject.SetActive(false);
         ShowDeathScreen(false);
 
         actualGrid = GameObject.Find("Actual_Grid").GetComponent<Grid>();
@@ -550,7 +551,28 @@ public class GameManager : MonoBehaviour
 
     public static void checkWin()
     {
+        List<GroundTile> groundTiles = tilemapToList(levelGroundActual);
+        int endTiles = groundTiles.Count(gt => gt.getGroundTileType() == GroundTile.GroundTileType.END);
+        int allTiles = groundTiles.Count(gt => gt.getGroundTileType() != GroundTile.GroundTileType.CRYSTAL);
+        if(endTiles == allTiles)
+        {
+            // TODO WIN
+        }
+    }
 
+    private static List<GroundTile> tilemapToList(Tilemap tm)
+    {
+        List<GroundTile> tmpList = new();
+        GroundTile tmpGt;
+        foreach(Vector3Int loc in tm.cellBounds.allPositionsWithin)
+        {
+            tmpGt = (GroundTile) tm.GetTile(loc);
+            if(!tmpGt) continue;
+
+            tmpList.Add(tmpGt);
+        }
+
+        return tmpList;
     }
 #endregion
 
