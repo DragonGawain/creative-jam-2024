@@ -6,6 +6,7 @@ using System;
 using UnityEngine.Tilemaps;
 using System.Linq;
 using Unity.VisualScripting;
+using JetBrains.Annotations;
 
 public class GameManager : MonoBehaviour
 {
@@ -31,6 +32,8 @@ public class GameManager : MonoBehaviour
     public static int nWalls = 24;
 
     static GameObject deathScreen;
+
+    static GameObject winScreen;
 
     static bool paused = false;
 
@@ -106,8 +109,11 @@ public class GameManager : MonoBehaviour
     static void initializeFirstLoad()
     {
         deathScreen = GameObject.FindGameObjectWithTag("Death");
-        deathScreen.transform.parent.GetChild(2).gameObject.SetActive(false);
+        winScreen = GameObject.FindGameObjectWithTag("WinScreen");
+        deathScreen.transform.parent.GetChild(3).gameObject.SetActive(false);
+        winScreen.transform.parent.GetChild(2).gameObject.SetActive(false);
         ShowDeathScreen(false);
+        ShowWinScreen(false);
 
         actualGrid = GameObject.Find("Actual_Grid").GetComponent<Grid>();
 
@@ -151,6 +157,12 @@ public class GameManager : MonoBehaviour
     {
         deathScreen.SetActive(showDeath);
         paused = showDeath;
+    }
+
+    public static void ShowWinScreen(bool showWin)
+    {
+        deathScreen.SetActive(showWin);
+        paused = showWin;
     }
 
     private static void updateTilemaps(int levelNb)
@@ -562,7 +574,7 @@ public class GameManager : MonoBehaviour
         int allTiles = groundTiles.Count(gt => gt.getGroundTileType() != GroundTile.GroundTileType.CRYSTAL);
         if(endTiles == allTiles)
         {
-            // TODO WIN
+            ShowWinScreen(true);
         }
     }
 
