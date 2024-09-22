@@ -106,6 +106,7 @@ public class GameManager : MonoBehaviour
     static void initializeFirstLoad()
     {
         deathScreen = GameObject.FindGameObjectWithTag("Death");
+        deathScreen.transform.parent.GetChild(2).gameObject.SetActive(false);
         ShowDeathScreen(false);
 
         actualGrid = GameObject.Find("Actual_Grid").GetComponent<Grid>();
