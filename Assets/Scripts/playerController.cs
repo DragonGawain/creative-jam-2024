@@ -27,6 +27,12 @@ public class PlayerController : MonoBehaviour
 
     AudioManager audioManager;
 
+    Animator animator; 
+
+    Vector2 lastMove;
+
+    int forceDelay = 25;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -42,6 +48,8 @@ public class PlayerController : MonoBehaviour
         ghostCharges = currentLevel.getGhostCharges();
 
         audioManager = GameObject.FindWithTag("AudioManager").GetComponent<AudioManager>();
+
+        animator = gameObject.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -52,36 +60,65 @@ public class PlayerController : MonoBehaviour
         return movementInput;
     }
 
+    private void FixedUpdate()
+    {
+        if (forceDelay >= 0)
+            forceDelay--;
+    }
+
     void Move(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
+        if (forceDelay > 0)
+            return;
+        forceDelay = 25;
+        // transform.position = GameManager.AlignToGrid(transform.position);
         movementInput = inputs.Player.Move.ReadValue<Vector2>();
         Vector3 movePos = transform.position;
         bool legalMove = false;
         // move right
         if (movementInput.x > 0 && variationTypes.Contains(VariationType.MOVE_RIGHT))
         {
-            movePos = GameManager.Move(transform, new Vector2Int(1, 0), out legalMove);
+            GameManager.Move(transform, new Vector2Int(1, 0), out legalMove);
+            if (legalMove)
+            {
+                transform.localScale = new Vector3(1,1,1);
+                animator.SetTrigger("walk_right");
+            }
         }
         // move left
         else if (movementInput.x < 0 && variationTypes.Contains(VariationType.MOVE_LEFT))
         {
-            movePos = GameManager.Move(transform, new Vector2Int(-1, 0), out legalMove);
+            GameManager.Move(transform, new Vector2Int(-1, 0), out legalMove);
+            if (legalMove)
+            {
+                transform.localScale = new Vector3(-1,1,1);
+                animator.SetTrigger("walk_left");
+            }
         }
         // move up
         else if (movementInput.y > 0 && variationTypes.Contains(VariationType.MOVE_UP))
         {
-            movePos = GameManager.Move(transform, new Vector2Int(0, 1), out legalMove);
+            GameManager.Move(transform, new Vector2Int(0, 1), out legalMove);
+            if (legalMove)
+                animator.SetTrigger("walk_up");
         }
         // move down
         else if (movementInput.y < 0 && variationTypes.Contains(VariationType.MOVE_DOWN))
         {
-            movePos = GameManager.Move(transform, new Vector2Int(0, -1), out legalMove);
+            GameManager.Move(transform, new Vector2Int(0, -1), out legalMove);
+            if (legalMove)
+                animator.SetTrigger("walk_down");
         }
 
         if (!legalMove)
             return;
 
-        transform.position = movePos;
+        lastMove = movementInput;
+
+        // transform.position = movePos;
+
+        // ensure that the player 
+        // transform.position = GameManager.AlignToGrid(transform.position);
 
         if (ghostCharges <= 0)
             isGhost = false;
@@ -100,9 +137,15 @@ public class PlayerController : MonoBehaviour
         if (oldIsGhost != isGhost)
         {
             if (isGhost)
+            {
+                animator.SetTrigger("GS");
                 audioManager.PlayGhostMusic();
+            }
             else
+            {
+                animator.SetTrigger("RGS");
                 audioManager.PlayNormalMusic();
+            }
         }
 
         if(oldIsGhost && !isGhost)
@@ -110,6 +153,16 @@ public class PlayerController : MonoBehaviour
             GameManager.SafeLanding();
         }
 
+        if (isGhost)
+            animator.SetBool("isGhost", true);
+        else
+            animator.SetBool("isGhost", false);
+
+    }
+
+    public Vector2 GetLastMove()
+    {
+        return lastMove;
     }
 
     void OnDestroy()

@@ -15,6 +15,13 @@ public class MimicController : MonoBehaviour
 
     bool firstTurn = true;
 
+    Animator animator; 
+
+    bool isMimicGhost = false;
+
+    int forceDelay = 25;
+
+
     void Awake()
     {
         // snap to grid
@@ -23,10 +30,26 @@ public class MimicController : MonoBehaviour
         GameManager.NextGameTick += Move;
         gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
         playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+
+        animator = gameObject.GetComponent<Animator>();
     }
 
     // Update is called once per frame
-    void Update() { }
+    // void Update() { 
+
+    //     if (forceDelay >= 0)
+    //         forceDelay--;
+    //     if (playerController.GetIsGhost() != isMimicGhost && forceDelay <= 0)
+    //     {
+    //         forceDelay = 25;
+    //         if (playerController.GetIsGhost())
+    //             animator.SetTrigger("GS"); 
+    //         else
+    //             animator.SetTrigger("RGS");
+    //         isMimicGhost = playerController.GetIsGhost();
+    //     }
+
+    // }
 
     // TODO:: gotta change this cause I changed the GameManager.Move() logic
     void Move()
@@ -36,34 +59,48 @@ public class MimicController : MonoBehaviour
             firstTurn = false;
             return;
         }
-        movementInput = playerController.GetMovementInput();
+        // movementInput = playerController.GetMovementInput();
 
         Vector3 pos = new(0, 0, 0);
         bool legalMove = true;
 
         // move right
-        if (movementInput.x > 0)
+        if (playerController.GetLastMove().x > 0)
         {
-            pos = GameManager.Move(transform, new Vector2Int(-1, 0), out legalMove);
+            GameManager.Move(transform, new Vector2Int(-1, 0), out legalMove);
+            if (legalMove)
+            {
+                transform.localScale = new Vector3(-1,1,1);
+                animator.SetTrigger("walk_left");
+            }
         }
         // move left
-        else if (movementInput.x < 0)
+        else if (playerController.GetLastMove().x < 0)
         {
-            pos = GameManager.Move(transform, new Vector2Int(1, 0), out legalMove);
+            GameManager.Move(transform, new Vector2Int(1, 0), out legalMove);
+            if (legalMove)
+            {
+                transform.localScale = new Vector3(1,1,1);
+                animator.SetTrigger("walk_right");
+            }
         }
         // move up
-        else if (movementInput.y > 0)
+        else if (playerController.GetLastMove().y > 0)
         {
-            pos = GameManager.Move(transform, new Vector2Int(0, -1), out legalMove);
+            GameManager.Move(transform, new Vector2Int(0, -1), out legalMove);
+            if (legalMove)
+                animator.SetTrigger("walk_down");
         }
         // move down
-        else if (movementInput.y < 0)
+        else if (playerController.GetLastMove().y < 0)
         {
-            pos = GameManager.Move(transform, new Vector2Int(0, 1), out legalMove);
+            GameManager.Move(transform, new Vector2Int(0, 1), out legalMove);
+            if (legalMove)
+                animator.SetTrigger("walk_up");
         }
 
-        if (legalMove)
-            transform.position = pos;
+        // if (legalMove)
+        //     transform.position = pos;
     }
 
     void OnDestroy()
