@@ -412,6 +412,7 @@ public class GameManager : MonoBehaviour
         )
         {
             player.DecrementGhostCharges();
+            checkWin();
         }
 
         // otherwise, not in ghost mode - deal damage to the ground
@@ -439,9 +440,9 @@ public class GameManager : MonoBehaviour
             levelItemsActual.RefreshTile(newCellLocation);
         }
 
+        
         return actualGrid.CellToWorld(newCellLocation) + new Vector3(0.5f, 0.5f, 0);
 
-        checkWin();
     }
 
     static int CheckMoveLegality(Vector3Int oldCellLocation, Vector3Int newCellLocation)
