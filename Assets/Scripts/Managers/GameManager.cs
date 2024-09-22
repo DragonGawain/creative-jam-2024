@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
 {
 #region Fields
     public static event Action NextGameTick;
+    public static event Action AltNextGameTick;
 
     // grids & tilemaps
     // where the levels are displayed
@@ -581,8 +582,11 @@ public class GameManager : MonoBehaviour
                 {
                     Move(player.transform, new Vector2Int(0, 1), out bool legalMove);
                     if (legalMove)
+                    {
                         pa.SetTrigger("walk_up");
-
+                        player.SetLastMove(0,1);
+                        AltNextGameTick?.Invoke();
+                    }
                     
                 }
             }
@@ -598,7 +602,13 @@ public class GameManager : MonoBehaviour
                 {
                     Move(player.transform, new Vector2Int(0, -1), out bool legalMove);
                     if (legalMove)
+                    {
                         pa.SetTrigger("walk_down");
+                        player.SetLastMove(0,-1);
+                        AltNextGameTick?.Invoke();
+                    }
+
+                    
                 }
             }
 
@@ -613,7 +623,12 @@ public class GameManager : MonoBehaviour
                 {
                     Move(player.transform, new Vector2Int(-1, 0), out bool legalMove);
                     if (legalMove)
+                    {
                         pa.SetTrigger("walk_left");
+                        player.SetLastMove(-1,0);
+                        AltNextGameTick?.Invoke();
+
+                    }
                 }
             }
 
@@ -628,7 +643,11 @@ public class GameManager : MonoBehaviour
                 {
                     Move(player.transform, new Vector2Int(1, 0), out bool legalMove);
                     if (legalMove)
+                    {
                         pa.SetTrigger("walk_right");
+                        player.SetLastMove(1,0);
+                        AltNextGameTick?.Invoke();
+                    }
                 }
             }
         }

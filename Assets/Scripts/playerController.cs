@@ -170,6 +170,11 @@ public class PlayerController : MonoBehaviour
         return lastMove;
     }
 
+    public void SetLastMove(Vector2 vec)
+    {
+        lastMove = vec;
+    }
+
     void OnDestroy()
     {
         inputs.Player.Move.performed -= Move;
