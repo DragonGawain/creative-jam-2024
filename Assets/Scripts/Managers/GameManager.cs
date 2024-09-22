@@ -37,6 +37,8 @@ public class GameManager : MonoBehaviour
 
     static Dictionary<Vector3Int, Item> activeItems = new();
 
+    static int walkingDamage = 1;
+
 
 
     // Start is called before the first frame update
@@ -192,6 +194,10 @@ public class GameManager : MonoBehaviour
 
         // CellToWorld retrns bottom-left corner
 
+        Vector3Int oldCellLocation = actualGrid.WorldToCell(pos);
+
+        ((GroundTile) levelGroundActual.GetTile(oldCellLocation)).decreaseDurability(walkingDamage);
+
         Vector3Int newCellLocation = actualGrid.WorldToCell(pos) + new Vector3Int(dir.x, dir.y, 0);
 
         // Stop player from moving when paused
@@ -212,6 +218,11 @@ public class GameManager : MonoBehaviour
         }
 
         return actualGrid.CellToWorld(newCellLocation) + new Vector3(0.5f, 0.5f, 0);
+    }
+
+    public static void SetWalkingDamage(int d)
+    {
+        walkingDamage = d;
     }
 
     static void Die()
