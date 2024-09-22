@@ -83,7 +83,7 @@ public class UIManager : MonoBehaviour
 
     public void OnSelectButton(int levelNb)
     {
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("MasterScene");
         StartCoroutine(WaitForJankToPass(levelNb));
         // GameManager.StartNewLevel(levelNb);
     }

@@ -50,6 +50,8 @@ public class GameManager : MonoBehaviour
 
     static int walkingDamage = 1;
 
+    static GameManager singleton;
+
 #endregion
 
 #region Unity Methods
@@ -57,6 +59,12 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        if (!singleton)
+            singleton = this;
+
+        if (this != singleton)
+            Destroy(this.gameObject);
+
         DontDestroyOnLoad(gameObject);
 
         actualGrid = GameObject.Find("Actual_Grid").GetComponent<Grid>();
@@ -76,12 +84,8 @@ public class GameManager : MonoBehaviour
 
         // player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
         deathScreen = GameObject.FindGameObjectWithTag("Death");
+        ShowDeathScreen(false);
 
-        /*
-            Death screen is active by default and hidden on wake
-            to be able to fetch a reference to it
-        */
-        //deathScreen.SetActive(false);
 
         NextGameTick += IncrementWind;
 
@@ -110,6 +114,12 @@ public class GameManager : MonoBehaviour
         clearLevel();
         loadLevel();
         reloadPlayer();
+    }
+
+    public static void ShowDeathScreen(bool showDeath)
+    {
+        deathScreen.SetActive(showDeath);
+        paused = showDeath;
     }
 
     private static void updateTilemaps(int levelNb)
@@ -486,8 +496,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("Dying™");
 
         // Show death ui
-        deathScreen.SetActive(true);
-        paused = true;
+        ShowDeathScreen(true);
     }
 
     public static Vector3 AlignToGrid(Vector3 pos)
