@@ -328,6 +328,7 @@ public class GameManager : MonoBehaviour
             ItemTile itemTile = (ItemTile) levelItemsActual.GetTile(newCellLocation);
             player.Enqueue(itemTile.GetVariation());
             levelItemsActual.SetTile(newCellLocation, null);
+            levelItemsActual.RefreshTile(newCellLocation);
         }
 
         return actualGrid.CellToWorld(newCellLocation) + new Vector3(0.5f, 0.5f, 0);
