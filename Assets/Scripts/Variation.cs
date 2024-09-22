@@ -16,6 +16,7 @@ public enum VariationType
     WIND,
     MIMIC,
     MIMIC_BODY,
+    BOOTS,
 }
 
 // I don't think this needs to be a monobehaviour? It not being a monobehaviour would mean

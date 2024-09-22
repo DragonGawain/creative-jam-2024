@@ -59,6 +59,9 @@ public class UIManager : MonoBehaviour
                 case "mimic_base":
                     queueIcons.Add(VariationType.MIMIC_BODY, icon);
                     break;
+                case "boots":
+                    queueIcons.Add(VariationType.BOOTS, icon);
+                    break;
             }
         }
 
