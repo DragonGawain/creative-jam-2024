@@ -170,9 +170,9 @@ public class PlayerController : MonoBehaviour
         return lastMove;
     }
 
-    public void SetLastMove(Vector2 vec)
+    public void SetLastMove(int x, int y)
     {
-        lastMove = vec;
+        lastMove = new Vector2(x,y);
     }
 
     void OnDestroy()
