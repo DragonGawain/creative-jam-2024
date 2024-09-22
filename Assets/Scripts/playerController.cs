@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
         inputs = new Inputs();
         inputs.Player.Enable();
         inputs.Player.Move.performed += Move;
-        inputs.Player.Move.canceled += EndMove;
+        inputs.Player.GhostMode.performed += ToggleGhostMode;
 
         gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
         currentLevel = gameManager.getLevel();
@@ -81,15 +81,23 @@ public class PlayerController : MonoBehaviour
 
         transform.position = movePos;
 
+        if (ghostCharges <= 0)
+            isGhost = false;
+
         gameManager.TriggerNextGameTick();
     }
 
-    void EndMove(UnityEngine.InputSystem.InputAction.CallbackContext ctx) { }
+    void ToggleGhostMode(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
+    {
+        isGhost = !isGhost;
+        if (ghostCharges <= 0)
+            isGhost = false;
+    }
 
     void OnDestroy()
     {
         inputs.Player.Move.performed -= Move;
-        inputs.Player.Move.canceled -= EndMove;
+        inputs.Player.GhostMode.performed -= ToggleGhostMode;
     }
 
     public void Enqueue(Variation variation)

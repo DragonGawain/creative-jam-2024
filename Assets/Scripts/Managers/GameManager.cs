@@ -371,7 +371,8 @@ public class GameManager : MonoBehaviour
             ItemTile itemTile = (ItemTile)levelItemsActual.GetTile(newCellLocation);
             if (itemTile.GetVariation().GetVariationType() == VariationType.MIMIC)
             {
-                itemTile.GetVariation().SetMimicIndex(mimicIndex);
+                // itemTile.GetVariation().SetMimicIndex(mimicIndex);
+                mimicIndex = itemTile.GetMimicIndex();
                 SpawnMimic();
             }
 
@@ -419,7 +420,7 @@ public class GameManager : MonoBehaviour
             // Whenever a player steps on lava, they Die™
             // Debug.Log("Current level tile: " + newCellLocation);
             // Debug.Log("Current level tile: " + levelGroundActual.GetTile(new Vector3Int(0, 0)));
-            if (levelGroundActual.GetTile(newCellLocation) == null)
+            if (levelGroundActual.GetTile(newCellLocation) == null && !player.GetIsGhost())
                 legal = 2;
         }
 
@@ -438,7 +439,6 @@ public class GameManager : MonoBehaviour
         MimicController mimicController = mimicInstance.GetComponent<MimicController>();
         mimicController.SetMimicIndex(mimicIndex);
         mimics[mimicIndex] = mimicController;
-        mimicIndex++;
     }
 
     public static void DespawnMimic(int index)

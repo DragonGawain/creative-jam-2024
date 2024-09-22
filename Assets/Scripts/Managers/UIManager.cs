@@ -26,8 +26,8 @@ public class UIManager : MonoBehaviour
         SelectMenu = GameObject.FindGameObjectWithTag("SelectMenu");
         CreditMenu = GameObject.FindGameObjectWithTag("CreditMenu");
 
-        SelectMenu.SetActive(false);
-        CreditMenu.SetActive(false);
+        // SelectMenu.SetActive(false);
+        // CreditMenu.SetActive(false);
 
         queue = GameObject.FindWithTag("Queue");
         Sprite[] icons = Resources.LoadAll<Sprite>("queueIcons");

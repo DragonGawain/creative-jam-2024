@@ -13,6 +13,8 @@ public class MimicController : MonoBehaviour
 
     int mimicIndex;
 
+    bool firstTurn = true;
+
     void Awake()
     {
         // snap to grid
@@ -29,6 +31,11 @@ public class MimicController : MonoBehaviour
     // TODO:: gotta change this cause I changed the GameManager.Move() logic
     void Move()
     {
+        if (firstTurn)
+        {
+            firstTurn = false;
+            return;
+        }
         movementInput = playerController.GetMovementInput();
 
         Vector3 pos = new(0, 0, 0);
