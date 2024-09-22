@@ -7,7 +7,6 @@ public class BackgroundTile : ITile
     // spritss
     Sprite currentSprite;
     Sprite lava;
-    Sprite dark;
     Sprite[] walls;
     bool isWall = false;
 
@@ -30,9 +29,7 @@ public class BackgroundTile : ITile
                 case "Lava":
                     lava = s;
                     break;
-                case "Dark":
-                    dark = s;
-                    break;
+
             }
         }
 
@@ -53,9 +50,7 @@ public class BackgroundTile : ITile
                 case "Lava":
                     currentSprite = lava;
                     break;
-                case "Dark":
-                    currentSprite = dark;
-                    break;
+
             }
         }
 
