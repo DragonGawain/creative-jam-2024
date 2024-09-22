@@ -134,7 +134,14 @@ public class GameManager : MonoBehaviour
 
     public static void ResetCurrentLevel()
     {
-        StartNewLevel(currentLevel.getLevelNum());
+        if(!currentLevel) 
+        {
+            StartNewLevel(1);
+        }
+        else
+        {
+            StartNewLevel(currentLevel.getLevelNum());
+        }
     }
 
     public static void ShowDeathScreen(bool showDeath)
@@ -431,6 +438,8 @@ public class GameManager : MonoBehaviour
         }
 
         return actualGrid.CellToWorld(newCellLocation) + new Vector3(0.5f, 0.5f, 0);
+
+        checkWin();
     }
 
     static int CheckMoveLegality(Vector3Int oldCellLocation, Vector3Int newCellLocation)
@@ -536,6 +545,11 @@ public class GameManager : MonoBehaviour
             //TODO kill player
         }
 
+    }
+
+    public static void checkWin()
+    {
+        
     }
 #endregion
 

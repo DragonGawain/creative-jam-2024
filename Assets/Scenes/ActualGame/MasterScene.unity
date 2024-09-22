@@ -879,7 +879,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelNum: 1
-  ghostCharges: 1
+  ghostCharges: 5
   queueSize: 2
   moveSize: 1
   windSize: 2
@@ -2683,7 +2683,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &648836637
 MonoBehaviour:
   m_ObjectHideFlags: 0
