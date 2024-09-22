@@ -52,6 +52,11 @@ public class PlayerController : MonoBehaviour
         animator = gameObject.GetComponent<Animator>();
     }
 
+    public Animator GetPlayerAnimator()
+    {
+        return animator;
+    }
+
     // Update is called once per frame
     void Update() { }
 

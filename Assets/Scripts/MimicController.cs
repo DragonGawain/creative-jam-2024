@@ -34,6 +34,11 @@ public class MimicController : MonoBehaviour
         animator = gameObject.GetComponent<Animator>();
     }
 
+    public Animator GetMimicAnimator()
+    {
+        return animator;
+    }
+
     // Update is called once per frame
     // void Update() { 
 

@@ -568,6 +568,8 @@ public class GameManager : MonoBehaviour
 
             Vector3 pos = new(0, 0, 0);
 
+            Animator pa = player.GetPlayerAnimator();
+
             int tmp = Mathf.CeilToInt(
                 (float)varTypesList.Count(variant => variant == VariationType.WIND_UP)
                     / (float)currentLevel.getWindSize()
@@ -577,9 +579,11 @@ public class GameManager : MonoBehaviour
             {
                 for (int i = 0; i < tmp; i++)
                 {
-                    pos = Move(player.transform, new Vector2Int(0, 1), out bool legalMove);
+                    Move(player.transform, new Vector2Int(0, 1), out bool legalMove);
                     if (legalMove)
-                        player.transform.position = pos;
+                        pa.SetTrigger("walk_up");
+
+                    
                 }
             }
 
@@ -592,9 +596,9 @@ public class GameManager : MonoBehaviour
             {
                 for (int i = 0; i < tmp; i++)
                 {
-                    pos = Move(player.transform, new Vector2Int(0, -1), out bool legalMove);
+                    Move(player.transform, new Vector2Int(0, -1), out bool legalMove);
                     if (legalMove)
-                        player.transform.position = pos;
+                        pa.SetTrigger("walk_down");
                 }
             }
 
@@ -607,9 +611,9 @@ public class GameManager : MonoBehaviour
             {
                 for (int i = 0; i < tmp; i++)
                 {
-                    pos = Move(player.transform, new Vector2Int(-1, 0), out bool legalMove);
+                    Move(player.transform, new Vector2Int(-1, 0), out bool legalMove);
                     if (legalMove)
-                        player.transform.position = pos;
+                        pa.SetTrigger("walk_left");
                 }
             }
 
@@ -622,9 +626,9 @@ public class GameManager : MonoBehaviour
             {
                 for (int i = 0; i < tmp; i++)
                 {
-                    pos = Move(player.transform, new Vector2Int(1, 0), out bool legalMove);
+                    Move(player.transform, new Vector2Int(1, 0), out bool legalMove);
                     if (legalMove)
-                        player.transform.position = pos;
+                        pa.SetTrigger("walk_right");
                 }
             }
         }
