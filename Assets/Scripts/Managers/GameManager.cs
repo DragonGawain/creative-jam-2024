@@ -584,7 +584,7 @@ public class GameManager : MonoBehaviour
                     if (legalMove)
                     {
                         pa.SetTrigger("walk_up");
-                        player.SetLastMove(0,1);
+                        player.SetLastMove(0,-1);
                         AltNextGameTick?.Invoke();
                     }
                     
@@ -604,7 +604,7 @@ public class GameManager : MonoBehaviour
                     if (legalMove)
                     {
                         pa.SetTrigger("walk_down");
-                        player.SetLastMove(0,-1);
+                        player.SetLastMove(0,1);
                         AltNextGameTick?.Invoke();
                     }
 
@@ -625,7 +625,7 @@ public class GameManager : MonoBehaviour
                     if (legalMove)
                     {
                         pa.SetTrigger("walk_left");
-                        player.SetLastMove(-1,0);
+                        player.SetLastMove(1,0);
                         AltNextGameTick?.Invoke();
 
                     }
@@ -645,7 +645,7 @@ public class GameManager : MonoBehaviour
                     if (legalMove)
                     {
                         pa.SetTrigger("walk_right");
-                        player.SetLastMove(1,0);
+                        player.SetLastMove(-1,0);
                         AltNextGameTick?.Invoke();
                     }
                 }
