@@ -13,6 +13,8 @@ public class UIManager : MonoBehaviour
 
     GameObject SelectMenu;
 
+    GameObject CreditMenu;
+
     static Dictionary<VariationType, Sprite> queueIcons = new();
 
     // Start is called before the first frame update
@@ -20,6 +22,11 @@ public class UIManager : MonoBehaviour
     {
         MainMenu = GameObject.FindGameObjectWithTag("MainMenu");
         SelectMenu = GameObject.FindGameObjectWithTag("SelectMenu");
+        CreditMenu = GameObject.FindGameObjectWithTag("CreditMenu");
+
+        SelectMenu.SetActive(false);
+        CreditMenu.SetActive(false);
+
         queue = GameObject.FindWithTag("Queue");
         Sprite[] icons = Resources.LoadAll<Sprite>("queueIcons");
         foreach (Sprite icon in icons)
@@ -84,9 +91,15 @@ public class UIManager : MonoBehaviour
         // SceneManager.LoadScene("SampleScene");
         GameManager.StartNewLevel(levelNb);
     }
+    public void OnCreditsButton()
+    {
+        MainMenu.SetActive(false);
+        CreditMenu.SetActive(true);
+    }
 
     public void OnBackButton()
     {
+        CreditMenu.SetActive(false);
         SelectMenu.SetActive(false);
         MainMenu.SetActive(true);
     }
