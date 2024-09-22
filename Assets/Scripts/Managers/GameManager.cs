@@ -224,7 +224,7 @@ public class GameManager : MonoBehaviour
         {
             paused = false;
             deathScreen.SetActive(false);
-            player.transform.position = new Vector3(0.5f, 0.5f, 0);
+            //player.transform.position = new Vector3(0.5f, 0.5f, 0);
         }
     }
 
@@ -550,7 +550,7 @@ public class GameManager : MonoBehaviour
 
     public static void checkWin()
     {
-        
+
     }
 #endregion
 
