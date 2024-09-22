@@ -420,9 +420,13 @@ public class GameManager : MonoBehaviour
         if (!player.GetIsGhost())
         {
             GroundTile gt = (GroundTile)levelGroundActual.GetTile(oldCellLocation);
-            int durabilityRemaining = gt.decreaseDurability(walkingDamage);
+            if(gt)
+            {
+                            int durabilityRemaining = gt.decreaseDurability(walkingDamage);
             if(durabilityRemaining <= 0) levelGroundActual.SetTile(oldCellLocation, null);
             levelGroundActual.RefreshTile(oldCellLocation);
+            }
+
         }
 
         if (levelItemsActual.HasTile(newCellLocation))
