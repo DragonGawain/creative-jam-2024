@@ -71,6 +71,11 @@ public class UIManager : MonoBehaviour
                 W2.SetActive(false);
                 W3.SetActive(true);
                 break;
+            default:
+                W1.SetActive(true);
+                W2.SetActive(false);
+                W3.SetActive(false);
+                break;
         }
     }
 
