@@ -104,6 +104,34 @@ public class GameManager : MonoBehaviour
         return currentLevel;
     }
 
+    public static void StartNewLevel(int levelNb)
+    {
+        updateTilemaps(levelNb);
+        clearLevel();
+        loadLevel();
+        reloadPlayer();
+    }
+
+    private static void updateTilemaps(int levelNb)
+    {
+        string levelGridName = "Level" + levelNb;
+        levelGrid = GameObject.Find(levelGridName).GetComponent<Grid>();
+        levelGroundBlueprint = levelGrid.transform
+            .Find(levelGridName + "_Ground")
+            .GetComponent<Tilemap>();
+        levelBackgroundBlueprint = levelGrid.transform
+            .Find(levelGridName + "_Background")
+            .GetComponent<Tilemap>();
+        levelItemsBlueprint = levelGrid.transform
+            .Find(levelGridName + "_Items")
+            .GetComponent<Tilemap>();
+
+        levelGroundActual.ClearAllTiles();
+        levelGroundActual.RefreshAllTiles();
+
+        levelBackgroundActual.ClearAllTiles();
+        levelBackgroundActual.RefreshAllTiles();
+    }
     public static void clearLevel()
     {
         levelGroundActual.ClearAllTiles();
@@ -115,13 +143,17 @@ public class GameManager : MonoBehaviour
         levelItemsActual.ClearAllTiles();
         levelItemsActual.RefreshAllTiles();
     }
-
-    public static void StartNewLevel(int levelNb)
+    private static void loadLevel()
     {
-        updateTilemaps(levelNb);
-        clearLevel();
-        loadLevel();
+        loadGround();
+        loadBackground();
 
+        currentLevel = levelGrid.GetComponent<Level>();
+        loadItems();
+    }
+
+    private static void reloadPlayer()
+    {
         if (GameObject.FindWithTag("Player"))
             Destroy(GameObject.FindWithTag("Player"));
 
@@ -157,35 +189,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private static void loadLevel()
-    {
-        loadGround();
-        loadBackground();
-
-        currentLevel = levelGrid.GetComponent<Level>();
-        loadItems();
-    }
-
-    private static void updateTilemaps(int levelNb)
-    {
-        string levelGridName = "Level" + levelNb;
-        levelGrid = GameObject.Find(levelGridName).GetComponent<Grid>();
-        levelGroundBlueprint = levelGrid.transform
-            .Find(levelGridName + "_Ground")
-            .GetComponent<Tilemap>();
-        levelBackgroundBlueprint = levelGrid.transform
-            .Find(levelGridName + "_Background")
-            .GetComponent<Tilemap>();
-        levelItemsBlueprint = levelGrid.transform
-            .Find(levelGridName + "_Items")
-            .GetComponent<Tilemap>();
-
-        levelGroundActual.ClearAllTiles();
-        levelGroundActual.RefreshAllTiles();
-
-        levelBackgroundActual.ClearAllTiles();
-        levelBackgroundActual.RefreshAllTiles();
-    }
 
     private static void loadGround()
     {
