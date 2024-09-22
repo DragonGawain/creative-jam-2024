@@ -352,7 +352,10 @@ public class GameManager : MonoBehaviour
         }
 
         // if in ghost mode - decrement ghost move charges
-        if (player.GetIsGhost())
+        if (
+            player.GetIsGhost()
+            && trans.TryGetComponent<PlayerController>(out PlayerController iDontNeedThis)
+        )
         {
             player.DecrementGhostCharges();
         }
