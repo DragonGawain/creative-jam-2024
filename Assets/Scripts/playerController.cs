@@ -74,8 +74,6 @@ public class PlayerController : MonoBehaviour
             movePos = GameManager.Move(transform, new Vector2Int(0, -1), out legalMove);
         }
 
-        Debug.Log("Legal move? " + legalMove);
-
         if (!legalMove)
             return;
 
@@ -160,52 +158,5 @@ public class PlayerController : MonoBehaviour
     public void SetQueueSize(int q)
     {
         queueSize = q;
-    }
-
-    // TEMP DEBUG METHODS (though like, we can just, use these I guess...)
-
-    public void EnqueueUp()
-    {
-        Enqueue(new Variation(VariationType.MOVE_UP));
-    }
-
-    public void EnqueueRight()
-    {
-        Enqueue(new Variation(VariationType.MOVE_RIGHT));
-    }
-
-    public void EnqueueDown()
-    {
-        Enqueue(new Variation(VariationType.MOVE_DOWN));
-    }
-
-    public void EnqueueLeft()
-    {
-        Enqueue(new Variation(VariationType.MOVE_LEFT));
-    }
-
-    public void EnqueueWindUp()
-    {
-        Enqueue(new Variation(VariationType.WIND_UP));
-    }
-
-    public void EnqueueWindRight()
-    {
-        Enqueue(new Variation(VariationType.WIND_RIGHT));
-    }
-
-    public void EnqueueWindDown()
-    {
-        Enqueue(new Variation(VariationType.WIND_DOWN));
-    }
-
-    public void EnqueueWindLeft()
-    {
-        Enqueue(new Variation(VariationType.WIND_LEFT));
-    }
-
-    public void EnqueueMimic()
-    {
-        Enqueue(new Variation(VariationType.MIMIC));
     }
 }
