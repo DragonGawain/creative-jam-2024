@@ -111,6 +111,7 @@ public class MimicController : MonoBehaviour
 
     void OnDestroy()
     {
+        GameManager.AltNextGameTick -= Move;
         GameManager.NextGameTick -= Move;
     }
 
