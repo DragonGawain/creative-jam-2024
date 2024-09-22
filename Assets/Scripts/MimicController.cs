@@ -37,22 +37,22 @@ public class MimicController : MonoBehaviour
         // move right
         if (movementInput.x > 0)
         {
-            pos = GameManager.Move(transform.position, new Vector2Int(-1, 0), out legalMove);
+            pos = GameManager.Move(transform, new Vector2Int(-1, 0), out legalMove);
         }
         // move left
         else if (movementInput.x < 0)
         {
-            pos = GameManager.Move(transform.position, new Vector2Int(1, 0), out legalMove);
+            pos = GameManager.Move(transform, new Vector2Int(1, 0), out legalMove);
         }
         // move up
         else if (movementInput.y > 0)
         {
-            pos = GameManager.Move(transform.position, new Vector2Int(0, -1), out legalMove);
+            pos = GameManager.Move(transform, new Vector2Int(0, -1), out legalMove);
         }
         // move down
         else if (movementInput.y < 0)
         {
-            pos = GameManager.Move(transform.position, new Vector2Int(0, 1), out legalMove);
+            pos = GameManager.Move(transform, new Vector2Int(0, 1), out legalMove);
         }
 
         if (legalMove)
@@ -67,5 +67,10 @@ public class MimicController : MonoBehaviour
     public void SetMimicIndex(int n)
     {
         mimicIndex = n;
+    }
+
+    public int GetMimicIndex()
+    {
+        return mimicIndex;
     }
 }

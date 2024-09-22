@@ -51,27 +51,27 @@ public class PlayerController : MonoBehaviour
     void Move(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
         movementInput = inputs.Player.Move.ReadValue<Vector2>();
-        Vector3 movePos = new(0, 0, 0);
-        bool legalMove = true;
+        Vector3 movePos = transform.position;
+        bool legalMove = false;
         // move right
         if (movementInput.x > 0 && variationTypes.Contains(VariationType.MOVE_RIGHT))
         {
-            movePos = GameManager.Move(transform.position, new Vector2Int(1, 0), out legalMove);
+            movePos = GameManager.Move(transform, new Vector2Int(1, 0), out legalMove);
         }
         // move left
         else if (movementInput.x < 0 && variationTypes.Contains(VariationType.MOVE_LEFT))
         {
-            movePos = GameManager.Move(transform.position, new Vector2Int(-1, 0), out legalMove);
+            movePos = GameManager.Move(transform, new Vector2Int(-1, 0), out legalMove);
         }
         // move up
         else if (movementInput.y > 0 && variationTypes.Contains(VariationType.MOVE_UP))
         {
-            movePos = GameManager.Move(transform.position, new Vector2Int(0, 1), out legalMove);
+            movePos = GameManager.Move(transform, new Vector2Int(0, 1), out legalMove);
         }
         // move down
         else if (movementInput.y < 0 && variationTypes.Contains(VariationType.MOVE_DOWN))
         {
-            movePos = GameManager.Move(transform.position, new Vector2Int(0, -1), out legalMove);
+            movePos = GameManager.Move(transform, new Vector2Int(0, -1), out legalMove);
         }
 
         Debug.Log("Legal move? " + legalMove);

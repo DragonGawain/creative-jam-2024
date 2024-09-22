@@ -311,8 +311,9 @@ public class GameManager : MonoBehaviour
         NextGameTick?.Invoke();
     }
 
-    public static Vector3 Move(Vector3 pos, Vector2Int dir, out bool legalMove)
+    public static Vector3 Move(Transform trans, Vector2Int dir, out bool legalMove)
     {
+        Vector3 pos = trans.position;
         legalMove = true;
 
         // Stop player from moving when paused
@@ -336,7 +337,18 @@ public class GameManager : MonoBehaviour
                 legalMove = false;
                 return pos;
             case 2:
-                // death of the player/mimic logic
+                Debug.Log("case 2");
+                // death of the player
+                if (trans.TryGetComponent<MimicController>(out MimicController deadMimic))
+                {
+                    Debug.Log("case 2 mimic");
+                    DespawnMimic(deadMimic.GetMimicIndex());
+                }
+                // if it's not a mimic, it's the player
+                else
+                {
+                    Die();
+                }
                 break;
         }
 
@@ -385,11 +397,11 @@ public class GameManager : MonoBehaviour
             legal = 1;
         }
         // Walking into a crystal
-        else if (levelGroundActual.HasTile(oldCellLocation))
+        else if (levelGroundActual.HasTile(newCellLocation))
         {
             // not in ghost mode - illegal
             if (
-                ((GroundTile)levelGroundActual.GetTile(oldCellLocation)).GetGroundTileType()
+                ((GroundTile)levelGroundActual.GetTile(newCellLocation)).GetGroundTileType()
                     == GroundTile.GroundTileType.CRYSTAL
                 && !player.GetIsGhost()
             )
@@ -410,6 +422,7 @@ public class GameManager : MonoBehaviour
                 legal = 2;
         }
 
+        Debug.Log("legality check: " + legal);
         return legal;
     }
 
@@ -429,9 +442,10 @@ public class GameManager : MonoBehaviour
 
     public static void DespawnMimic(int index)
     {
+        Debug.Log("despawn");
         // gotta check if it's null cause there's multiple ways that a mimic can die
         if (mimics[index] != null)
-            Destroy(mimics[index]);
+            Destroy(mimics[index].gameObject);
         mimics[index] = null;
     }
 
@@ -478,7 +492,7 @@ public class GameManager : MonoBehaviour
             {
                 for (int i = 0; i < tmp; i++)
                 {
-                    pos = Move(player.transform.position, new Vector2Int(0, 1), out bool legalMove);
+                    pos = Move(player.transform, new Vector2Int(0, 1), out bool legalMove);
                     if (legalMove)
                         player.transform.position = pos;
                 }
@@ -493,11 +507,7 @@ public class GameManager : MonoBehaviour
             {
                 for (int i = 0; i < tmp; i++)
                 {
-                    pos = Move(
-                        player.transform.position,
-                        new Vector2Int(0, -1),
-                        out bool legalMove
-                    );
+                    pos = Move(player.transform, new Vector2Int(0, -1), out bool legalMove);
                     if (legalMove)
                         player.transform.position = pos;
                 }
@@ -512,11 +522,7 @@ public class GameManager : MonoBehaviour
             {
                 for (int i = 0; i < tmp; i++)
                 {
-                    pos = Move(
-                        player.transform.position,
-                        new Vector2Int(-1, 0),
-                        out bool legalMove
-                    );
+                    pos = Move(player.transform, new Vector2Int(-1, 0), out bool legalMove);
                     if (legalMove)
                         player.transform.position = pos;
                 }
@@ -531,7 +537,7 @@ public class GameManager : MonoBehaviour
             {
                 for (int i = 0; i < tmp; i++)
                 {
-                    pos = Move(player.transform.position, new Vector2Int(1, 0), out bool legalMove);
+                    pos = Move(player.transform, new Vector2Int(1, 0), out bool legalMove);
                     if (legalMove)
                         player.transform.position = pos;
                 }
