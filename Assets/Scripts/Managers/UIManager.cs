@@ -20,6 +20,10 @@ public class UIManager : MonoBehaviour
 
     static Dictionary<VariationType, Sprite> queueIcons = new();
 
+    static GameObject W1;
+    static GameObject W2;
+    static GameObject W3;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -46,11 +50,37 @@ public class UIManager : MonoBehaviour
         // GameManager.StartNewLevel(levelNb);
     }
 
+    public static void IncrementWind(int n)
+    {
+        switch (n)
+        {
+            case 1:
+                W1.SetActive(true);
+                W2.SetActive(false);
+                W3.SetActive(false);
+                break;
+            case 2:
+                W1.SetActive(false);
+                W2.SetActive(true);
+                W3.SetActive(false);
+                break;
+            case 3:
+                W1.SetActive(false);
+                W2.SetActive(false);
+                W3.SetActive(true);
+                break;
+            default:
+        }
+    }
+
     static void initialize()
     {
         queueIcons.Clear();
         
         queue = GameObject.FindWithTag("Queue");
+        W1 = queue.transform.parent.GetChild(3).gameObject;
+        W2 = queue.transform.parent.GetChild(4).gameObject;
+        W3 = queue.transform.parent.GetChild(5).gameObject;
         Sprite[] icons = Resources.LoadAll<Sprite>("queueIcons");
         foreach (Sprite icon in icons)
         {
