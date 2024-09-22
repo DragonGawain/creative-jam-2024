@@ -116,6 +116,11 @@ public class GameManager : MonoBehaviour
         reloadPlayer();
     }
 
+    public static void ResetCurrentLevel()
+    {
+        StartNewLevel(currentLevel.getLevelNum());
+    }
+
     public static void ShowDeathScreen(bool showDeath)
     {
         deathScreen.SetActive(showDeath);

@@ -3,6 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 public class Level : MonoBehaviour {
+    [SerializeField] private int levelNum;
     [SerializeField] private int ghostCharges;
     [SerializeField] private int queueSize;
     [SerializeField] private int moveSize = 1;
@@ -22,5 +23,6 @@ public class Level : MonoBehaviour {
     public Vector3Int getPlayerStartLoc() { return playerStartLoc; }
     public List<Vector3Int> getMimicStartLocs() { return mimicStartLocs; }
     public List<VariationType> getStartVariations() { return variationTypes; }
+    public int getLevelNum() { return levelNum; }
 
 }
