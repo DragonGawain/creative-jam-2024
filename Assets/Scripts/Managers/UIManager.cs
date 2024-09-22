@@ -104,6 +104,7 @@ public class UIManager : MonoBehaviour
 
     public void OnCreditsButton()
     {
+        SelectMenu.SetActive(false);
         MainMenu.SetActive(false);
         CreditMenu.SetActive(true);
     }
