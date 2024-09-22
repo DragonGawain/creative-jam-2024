@@ -360,7 +360,7 @@ public class GameManager : MonoBehaviour
             player.DecrementGhostCharges();
         }
         // otherwise, not in ghost mode - deal damage to the ground
-        else
+        else if (!player.GetIsGhost())
         {
             ((GroundTile)levelGroundActual.GetTile(oldCellLocation)).decreaseDurability(
                 walkingDamage
