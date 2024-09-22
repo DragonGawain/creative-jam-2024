@@ -15,6 +15,8 @@ public class UIManager : MonoBehaviour
 
     GameObject CreditMenu;
 
+    static int queueSize = 6;
+
     static Dictionary<VariationType, Sprite> queueIcons = new();
 
     // Start is called before the first frame update
@@ -91,6 +93,7 @@ public class UIManager : MonoBehaviour
         // SceneManager.LoadScene("SampleScene");
         GameManager.StartNewLevel(levelNb);
     }
+
     public void OnCreditsButton()
     {
         MainMenu.SetActive(false);
@@ -118,7 +121,9 @@ public class UIManager : MonoBehaviour
         // Can be changed later :shrug:
         for (int i = 0; i < items.Length; i++)
         {
-            queue.transform.GetChild(5 - i).GetComponent<Image>().sprite = queueIcons[items[i]];
+            queue.transform.GetChild((queueSize - 1) - i).GetComponent<Image>().sprite = queueIcons[
+                items[i]
+            ];
         }
     }
 
@@ -126,5 +131,11 @@ public class UIManager : MonoBehaviour
     {
         yield return new WaitForSeconds(1);
         GameManager.StartNewLevel(levelnb);
+    }
+
+    public static void SetQueueSize(int n)
+    {
+        queueSize = n;
+        // also change the UI to display the correct number of queue slots
     }
 }

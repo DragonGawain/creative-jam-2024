@@ -135,6 +135,7 @@ public class GameManager : MonoBehaviour
         );
         player = playerInstance.GetComponent<PlayerController>();
         player.SetQueueSize(currentLevel.getQueueSize());
+        UIManager.SetQueueSize(currentLevel.getQueueSize());
 
         loadInitialVariations();
 
