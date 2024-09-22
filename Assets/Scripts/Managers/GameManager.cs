@@ -97,7 +97,7 @@ public class GameManager : MonoBehaviour
             player.transform.position = new Vector3(0.5f, 0.5f, 0);
         }
     }
-    private void loadLevel()
+    private static void loadLevel()
     {
         loadGround();
         loadBackground();
