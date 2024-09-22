@@ -25,6 +25,8 @@ public class PlayerController : MonoBehaviour
 
     int ghostCharges = 6;
 
+    AudioManager audioManager;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -38,6 +40,8 @@ public class PlayerController : MonoBehaviour
 
         queueSize = currentLevel.getQueueSize();
         ghostCharges = currentLevel.getGhostCharges();
+
+        audioManager = GameObject.FindWithTag("AudioManager").GetComponent<AudioManager>();
     }
 
     // Update is called once per frame
@@ -87,9 +91,19 @@ public class PlayerController : MonoBehaviour
 
     void ToggleGhostMode(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
+        bool oldIsGhost = isGhost;
         isGhost = !isGhost;
         if (ghostCharges <= 0)
             isGhost = false;
+
+        // only change the audio stuff if ghost mode changed
+        if (oldIsGhost != isGhost)
+        {
+            if (isGhost)
+                audioManager.PlayGhostMusic();
+            else
+                audioManager.PlayNormalMusic();
+        }
     }
 
     void OnDestroy()

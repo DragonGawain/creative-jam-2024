@@ -13,6 +13,8 @@ TagManager:
   - MainMenu
   - SelectMenu
   - Mimic
+  - CreditMenu
+  - AudioManager
   layers:
   - Default
   - TransparentFX
