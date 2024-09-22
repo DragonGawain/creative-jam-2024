@@ -152,6 +152,9 @@ public class GameManager : MonoBehaviour
 
         foreach(Vector3Int loc in levelGroundBlueprint.cellBounds.allPositionsWithin)
         {
+            TileBase tb = levelGroundBlueprint.GetTile(loc);
+            if(!tb) continue;
+
             durability = 1;
             breakable = false;
             gtt = GroundTile.GroundTileType.NULL;
@@ -159,10 +162,6 @@ public class GameManager : MonoBehaviour
             GroundTile gt = ScriptableObject.CreateInstance<GroundTile>();
             gt.Initialize();
             
-            TileBase tb = levelGroundBlueprint.GetTile(loc);
-            
-            if(!tb) continue;
-
             // check if rock
             for(int i = 0; i <= 3; i++)
             {
@@ -197,11 +196,11 @@ public class GameManager : MonoBehaviour
     {
         foreach(Vector3Int loc in levelBackgroundBlueprint.cellBounds.allPositionsWithin)
         {
+            TileBase tb = levelBackgroundBlueprint.GetTile(loc);
+            if(!tb) continue;
+
             BackgroundTile bgt = ScriptableObject.CreateInstance<BackgroundTile>();
             bgt.Initialize();
-            TileBase tb = levelBackgroundBlueprint.GetTile(loc);
-
-            if(!tb) continue;
 
             levelBackgroundActual.SetTile(loc, bgt);
             ((BackgroundTile) levelBackgroundActual.GetTile(loc)).SetSprite(tb.name);
@@ -215,11 +214,11 @@ public class GameManager : MonoBehaviour
     {
         foreach(Vector3Int loc in levelItemsBlueprint.cellBounds.allPositionsWithin)
         {
+            TileBase tb = levelItemsBlueprint.GetTile(loc);
+            if(!tb) continue;
+
             ItemTile itemTile = ScriptableObject.CreateInstance<ItemTile>();
             itemTile.Initialize();
-            TileBase tb = levelItemsBlueprint.GetTile(loc);
-
-            if(!tb) continue;
 
             int size;
             switch(tb.name[..4])
