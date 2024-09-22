@@ -13,11 +13,13 @@ public class GameManager : MonoBehaviour
     // where the levels are displayed
 
     static Grid actualGrid;
+    static Tilemap levelItemsActual;
     static Tilemap levelGroundActual;
     static Tilemap levelBackgroundActual;
 
     // level blueprints
     static Grid levelGrid;
+    static Tilemap levelItemsBlueprint;
     static Tilemap levelGroundBlueprint;
     static Tilemap levelBackgroundBlueprint;
 
@@ -45,6 +47,7 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         actualGrid = GameObject.Find("Actual_Grid").GetComponent<Grid>();
+        levelItemsActual = actualGrid.transform.Find("Actual_Items").GetComponent<Tilemap>(); 
         levelGroundActual = actualGrid.transform.Find("Actual_Ground").GetComponent<Tilemap>();
         levelBackgroundActual = actualGrid.transform.Find("Actual_Background").GetComponent<Tilemap>();
 
@@ -72,14 +75,24 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update() { }
 
+    public static void clearLevel()
+    {
+        levelGroundActual.ClearAllTiles();
+        levelGroundActual.RefreshAllTiles();
+
+        levelBackgroundActual.ClearAllTiles();
+        levelBackgroundActual.RefreshAllTiles();
+
+        levelItemsActual.ClearAllTiles();
+        levelItemsActual.RefreshAllTiles();
+    }
+
     public static void StartNewLevel(int levelNb)
     {
 
         updateTilemaps(levelNb);
-
+        clearLevel();
         loadLevel();
-
-        
 
         activeItems.Clear();
 
@@ -110,12 +123,7 @@ public class GameManager : MonoBehaviour
         levelGrid = GameObject.Find(levelGridName).GetComponent<Grid>();
         levelGroundBlueprint = levelGrid.transform.Find(levelGridName + "_Ground").GetComponent<Tilemap>();
         levelBackgroundBlueprint = levelGrid.transform.Find(levelGridName + "_Background").GetComponent<Tilemap>();
-
-        levelGroundActual.ClearAllTiles();
-        levelGroundActual.RefreshAllTiles();
-
-        levelBackgroundActual.ClearAllTiles();
-        levelBackgroundActual.RefreshAllTiles();
+        levelItemsBlueprint = levelGrid.transform.Find(levelGridName + "_Items").GetComponent<Tilemap>();
     }
 
     private static void loadGround()
@@ -188,7 +196,19 @@ public class GameManager : MonoBehaviour
 
     private static void loadItems()
     {
+        foreach(Vector3Int loc in levelItemsBlueprint.cellBounds.allPositionsWithin)
+        {
+            ItemTile itemTile = ScriptableObject.CreateInstance<ItemTile>();
+            itemTile.Initialize();
+            TileBase tb = levelItemsBlueprint.GetTile(loc);
 
+            if(!tb) continue;
+
+            levelItemsActual.SetTile(loc, itemTile);
+            ((ItemTile) levelItemsActual.GetTile(loc)).SetSprite(tb.name);
+
+            levelItemsActual.RefreshTile(loc);
+        }
     }
 
     public void TriggerNextGameTick()
