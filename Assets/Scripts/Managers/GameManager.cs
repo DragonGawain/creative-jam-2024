@@ -5,9 +5,11 @@ using UnityEngine.Events;
 using System;
 using UnityEngine.Tilemaps;
 using System.Linq;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
+#region Fields
     public static event Action NextGameTick;
 
     // grids & tilemaps
@@ -47,6 +49,10 @@ public class GameManager : MonoBehaviour
     int windCounterReset = 3;
 
     static int walkingDamage = 1;
+
+#endregion
+
+#region Unity Methods
 
     // Start is called before the first frame update
     void Awake()
@@ -90,6 +96,9 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update() { }
 
+#endregion
+
+#region Level Utils
     public Level getLevel()
     {
         return currentLevel;
@@ -281,6 +290,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+#endregion
+
+#region Variations
     static void loadInitialVariations()
     {
         // set move size
@@ -306,11 +318,10 @@ public class GameManager : MonoBehaviour
             player.Enqueue(new Variation(vari, Variation.GetVariationSize(vari)));
         }
     }
+#endregion
 
-    public void TriggerNextGameTick()
-    {
-        NextGameTick?.Invoke();
-    }
+
+#region Movement
 
     public static Vector3 Move(Transform trans, Vector2Int dir, out bool legalMove)
     {
@@ -363,9 +374,10 @@ public class GameManager : MonoBehaviour
         // otherwise, not in ghost mode - deal damage to the ground
         if (!player.GetIsGhost())
         {
-            ((GroundTile)levelGroundActual.GetTile(oldCellLocation)).decreaseDurability(
-                walkingDamage
-            );
+            GroundTile gt = (GroundTile)levelGroundActual.GetTile(oldCellLocation);
+            int durabilityRemaining = gt.decreaseDurability(walkingDamage);
+            if(durabilityRemaining <= 0) levelGroundActual.SetTile(oldCellLocation, null);
+            levelGroundActual.RefreshTile(oldCellLocation);
         }
 
         if (levelItemsActual.HasTile(newCellLocation))
@@ -429,6 +441,9 @@ public class GameManager : MonoBehaviour
         return legal;
     }
 
+#endregion
+
+#region Mimic
     public static void SpawnMimic()
     {
         // check if there are any mimics currently alive to determine where to spawn the mimic
@@ -450,6 +465,13 @@ public class GameManager : MonoBehaviour
         mimics[index] = null;
     }
 
+#endregion
+
+#region Misc
+    public void TriggerNextGameTick()
+    {
+        NextGameTick?.Invoke();
+    }
     public static void SetWalkingDamage(int d)
     {
         walkingDamage = d;
@@ -470,6 +492,21 @@ public class GameManager : MonoBehaviour
         return actualGrid.CellToWorld(actualGrid.WorldToCell(pos)) + new Vector3(0.5f, 0.5f, 0);
     }
 
+    public static void SafeLanding()
+    {
+        Vector3Int playerPos = actualGrid.WorldToCell(player.transform.position);
+        GroundTile gt = ((GroundTile) levelGroundActual.GetTile(playerPos));
+        GroundTile.GroundTileType gtt = gt.getGroundTileType();
+        if(gtt != GroundTile.GroundTileType.ROCK
+        && gtt != GroundTile.GroundTileType.END)
+        {
+            //TODO kill player
+        }
+
+    }
+#endregion
+
+#region Wind
     void IncrementWind()
     {
         windCounter++;
@@ -545,4 +582,5 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+#endregion
 }

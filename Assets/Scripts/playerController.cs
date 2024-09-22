@@ -104,6 +104,12 @@ public class PlayerController : MonoBehaviour
             else
                 audioManager.PlayNormalMusic();
         }
+
+        if(oldIsGhost && !isGhost)
+        {
+            GameManager.SafeLanding();
+        }
+
     }
 
     void OnDestroy()

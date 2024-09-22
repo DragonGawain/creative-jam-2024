@@ -18,6 +18,8 @@ public class GroundTile: ITile
     Sprite[][] rockTiles;
     Sprite crystalTile;
     Sprite endTile;
+
+    public GroundTileType getGroundTileType(){ return groundTileType; }
     public void SetValues(int durability, bool breakable, GroundTileType gtt)
     {
         this.durability = durability;
