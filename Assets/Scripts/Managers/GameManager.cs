@@ -46,11 +46,13 @@ public class GameManager : MonoBehaviour
     public static int windCounter = 0;
 
     [SerializeField, Range(2, 5)]
-    int windCounterReset = 3;
+    static int windCounterReset = 3;
 
     static int walkingDamage = 1;
 
     static GameManager singleton;
+
+    static bool isFirstLoad;
 
 #endregion
 
@@ -66,6 +68,44 @@ public class GameManager : MonoBehaviour
             Destroy(this.gameObject);
 
         DontDestroyOnLoad(gameObject);
+
+        isFirstLoad = false;
+    }
+
+    private void Start()
+    {
+        // StartNewLevel(1);
+    }
+
+    // Update is called once per frame
+    void Update() { }
+
+#endregion
+
+#region Level Utils
+    public Level getLevel()
+    {
+        return currentLevel;
+    }
+
+    public static void StartNewLevel(int levelNb)
+    {
+        if (!isFirstLoad)
+        {
+            initializeFirstLoad();
+            isFirstLoad = true;
+        }
+
+        updateTilemaps(levelNb);
+        clearLevel();
+        loadLevel();
+        reloadPlayer();
+    }
+
+    static void initializeFirstLoad()
+    {
+        deathScreen = GameObject.FindGameObjectWithTag("Death");
+        ShowDeathScreen(false);
 
         actualGrid = GameObject.Find("Actual_Grid").GetComponent<Grid>();
 
@@ -83,37 +123,13 @@ public class GameManager : MonoBehaviour
         Array.Clear(mimics, 0, mimics.Length);
 
         // player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
-        deathScreen = GameObject.FindGameObjectWithTag("Death");
-        ShowDeathScreen(false);
+        // deathScreen = GameObject.FindGameObjectWithTag("Death");
+        // ShowDeathScreen(false);
 
 
         NextGameTick += IncrementWind;
 
         Variation.InitializeVariationSprites();
-    }
-
-    private void Start()
-    {
-        StartNewLevel(1);
-    }
-
-    // Update is called once per frame
-    void Update() { }
-
-#endregion
-
-#region Level Utils
-    public Level getLevel()
-    {
-        return currentLevel;
-    }
-
-    public static void StartNewLevel(int levelNb)
-    {
-        updateTilemaps(levelNb);
-        clearLevel();
-        loadLevel();
-        reloadPlayer();
     }
 
     public static void ResetCurrentLevel()
@@ -524,7 +540,7 @@ public class GameManager : MonoBehaviour
 #endregion
 
 #region Wind
-    void IncrementWind()
+    static void IncrementWind()
     {
         windCounter++;
         if (windCounter >= windCounterReset)

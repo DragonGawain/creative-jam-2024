@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
+    public static UIManager Instance { get; private set; }
     static GameObject queue;
 
     GameObject MainMenu;
@@ -29,6 +30,26 @@ public class UIManager : MonoBehaviour
         // SelectMenu.SetActive(false);
         // CreditMenu.SetActive(false);
 
+    }
+
+    public void OnStartButton()
+    {
+        MainMenu.SetActive(false);
+        SelectMenu.SetActive(true);
+    }
+
+    public void OnSelectButton(int levelNb)
+    {
+        SceneManager.LoadScene("MasterScene");
+        StartCoroutine(WaitForJankToPass(levelNb));
+        initialize();
+        // GameManager.StartNewLevel(levelNb);
+    }
+
+    static void initialize()
+    {
+        queueIcons.Clear();
+        
         queue = GameObject.FindWithTag("Queue");
         Sprite[] icons = Resources.LoadAll<Sprite>("queueIcons");
         foreach (Sprite icon in icons)
@@ -75,19 +96,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void OnStartButton()
-    {
-        MainMenu.SetActive(false);
-        SelectMenu.SetActive(true);
-    }
-
-    public void OnSelectButton(int levelNb)
-    {
-        SceneManager.LoadScene("MasterScene");
-        StartCoroutine(WaitForJankToPass(levelNb));
-        // GameManager.StartNewLevel(levelNb);
-    }
-
     public void OnSelectButtonDEBUG(int levelNb)
     {
         // SceneManager.LoadScene("SampleScene");
@@ -117,6 +125,8 @@ public class UIManager : MonoBehaviour
 
     public static void UpdateQueueVisuals(VariationType[] items)
     {
+        if (queue == null)
+            initialize();
         // set to 6 for now cause that's the length of the queue.
         // Can be changed later :shrug:
         for (int i = 0; i < items.Length; i++)
