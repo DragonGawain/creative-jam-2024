@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using System;
 using UnityEngine.Tilemaps;
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class GameManager : MonoBehaviour
     static Tilemap levelItemsActual;
     static Tilemap levelGroundActual;
     static Tilemap levelBackgroundActual;
+    static Level currentLevel;
 
     // level blueprints
     static Grid levelGrid;
@@ -39,7 +41,6 @@ public class GameManager : MonoBehaviour
     [SerializeField, Range(2, 5)]
     int windCounterReset = 3;
 
-    static Dictionary<Vector3Int, Item> activeItems = new();
 
     static int walkingDamage = 1;
 
@@ -83,6 +84,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update() { }
 
+    public Level getLevel() { return currentLevel; }
     public static void clearLevel()
     {
         levelGroundActual.ClearAllTiles();
@@ -108,16 +110,6 @@ public class GameManager : MonoBehaviour
         GameObject playerInstance = Instantiate(playerObject, new Vector3(0.5f, 0.5f, 0), Quaternion.identity);
         player = playerInstance.GetComponent<PlayerController>();
 
-        
-
-        activeItems.Clear();
-
-        GameObject[] items = GameObject.FindGameObjectsWithTag("Item");
-        foreach (GameObject item in items)
-        {
-            activeItems.Add(actualGrid.WorldToCell(item.transform.position), item.GetComponent<Item>());
-        }
-
         // Reset pause screen if necessary
         if (paused)
         {
@@ -130,7 +122,10 @@ public class GameManager : MonoBehaviour
     {
         loadGround();
         loadBackground();
+
+        currentLevel = levelGrid.GetComponent<Level>();
         loadItems();
+
     }
 
     private static void updateTilemaps(int levelNb)
@@ -226,8 +221,28 @@ public class GameManager : MonoBehaviour
 
             if(!tb) continue;
 
+            int size;
+            switch(tb.name[..4])
+            {
+                case "wind":
+                    size = currentLevel.getWindSize();
+                    break;
+                case "move":
+                    size = currentLevel.getMoveSize();
+                    break;
+                case "mimi":
+                    size = currentLevel.getMimicSize();
+                    break;
+                case "boot":
+                    size = currentLevel.getBootSize();
+                    break;
+                default:
+                    size = 1;
+                    break;
+
+            }
             levelItemsActual.SetTile(loc, itemTile);
-            ((ItemTile) levelItemsActual.GetTile(loc)).SetSprite(tb.name);
+            ((ItemTile) levelItemsActual.GetTile(loc)).SetSprite(tb.name, size);
 
             levelItemsActual.RefreshTile(loc);
         }
@@ -295,6 +310,7 @@ public class GameManager : MonoBehaviour
         }
 
 
+
         // if in ghost mode - decrement ghost move charges
         if (player.GetIsGhost())
         {
@@ -308,11 +324,11 @@ public class GameManager : MonoBehaviour
 
 
 
-        if (activeItems.ContainsKey(newCellLocation))
+        if (levelItemsActual.HasTile(newCellLocation))
         {
-            player.Enqueue(activeItems[newCellLocation].GetVariation());
-            Destroy(activeItems[newCellLocation].gameObject);
-            activeItems.Remove(newCellLocation);
+            ItemTile itemTile = (ItemTile) levelItemsActual.GetTile(newCellLocation);
+            player.Enqueue(itemTile.GetVariation());
+            levelItemsActual.SetTile(newCellLocation, null);
         }
 
         return actualGrid.CellToWorld(newCellLocation) + new Vector3(0.5f, 0.5f, 0);
@@ -344,44 +360,60 @@ public class GameManager : MonoBehaviour
         if (windCounter >= windCounterReset)
         {
             windCounter = 0;
+            if(player.GetIsGhost()) return;
             // check if there is wind in the queue
             Queue<VariationType> varTypes = player.GetVariationTypesQueue();
+            List<VariationType> varTypesList = varTypes.ToList();
 
             Vector3 pos = new(0,0,0);
 
-            if (varTypes.Contains(VariationType.WIND_UP))
+            int tmp = Mathf.CeilToInt((float) varTypesList.Count(variant => variant == VariationType.WIND_UP) / (float) currentLevel.getWindSize() - 0.01f); // yay safety
+            if(tmp > 0)
+            {
+                for(int i = 0; i < tmp; i++)
                 {
                     pos = Move(player.transform.position, new Vector2Int(0, 1), out bool legalMove);
                     if (legalMove)
                         player.transform.position = pos;
-
-                    // MIMIC HAS TO MOVE!!!!
                 }
-            if (varTypes.Contains(VariationType.WIND_DOWN))
+                
+            }
+
+            tmp = Mathf.CeilToInt((float) varTypesList.Count(variant => variant == VariationType.WIND_DOWN) / (float) currentLevel.getWindSize() - 0.01f);
+            if(tmp > 0)
+            {
+                for(int i = 0; i < tmp; i++)
                 {
                     pos = Move(player.transform.position, new Vector2Int(0, -1), out bool legalMove);
                     if (legalMove)
                         player.transform.position = pos;
-
-                    // MIMIC HAS TO MOVE!!!!
                 }
-            if (varTypes.Contains(VariationType.WIND_LEFT))
+                
+            }
+
+            tmp = Mathf.CeilToInt((float) varTypesList.Count(variant => variant == VariationType.WIND_LEFT) / (float) currentLevel.getWindSize() - 0.01f);
+            if(tmp > 0)
+            {
+                for(int i = 0; i < tmp; i++)
                 {
                     pos = Move(player.transform.position, new Vector2Int(-1, 0), out bool legalMove);
                     if (legalMove)
                         player.transform.position = pos;
-
-                    // MIMIC HAS TO MOVE!!!!
                 }
-            if (varTypes.Contains(VariationType.WIND_RIGHT))
+                
+            }
+
+            tmp = Mathf.CeilToInt((float) varTypesList.Count(variant => variant == VariationType.WIND_RIGHT) / (float) currentLevel.getWindSize() - 0.01f);
+            if(tmp > 0)
+            {
+                for(int i = 0; i < tmp; i++)
                 {
                     pos = Move(player.transform.position, new Vector2Int(1, 0), out bool legalMove);
                     if (legalMove)
                         player.transform.position = pos;
-
-                    // MIMIC HAS TO MOVE!!!!
                 }
-
+                
+            }
 
         }
     }

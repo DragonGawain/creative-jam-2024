@@ -57,62 +57,57 @@ public class ItemTile: ITile
 
     }
 
-    public void SetSprite(string name)
+    public void SetSprite(string name, int size)
     {
         switch(name)
         {
             case "wind_u":
                 currentSprite = wind_u;   
-                vt = new Variation(VariationType.WIND_UP);
+                vt = new Variation(VariationType.WIND_UP, size);
                 break;
             case "wind_d":
                 currentSprite = wind_d;
-                vt = new Variation(VariationType.WIND_DOWN);
+                vt = new Variation(VariationType.WIND_DOWN, size);
                 break;
             case "wind_l":
                 currentSprite = wind_l;
-                vt = new Variation(VariationType.WIND_LEFT);
+                vt = new Variation(VariationType.WIND_LEFT, size);
                 break;
             case "wind_r":
                 currentSprite = wind_r;
-                vt = new Variation(VariationType.WIND_RIGHT);
+                vt = new Variation(VariationType.WIND_RIGHT, size);
                 break;
             case "move_u":
                 currentSprite = move_u;
-                vt = new Variation(VariationType.MOVE_UP);
+                vt = new Variation(VariationType.MOVE_UP, size);
                 break;
             case "move_d":
                 currentSprite = move_d;
-                vt = new Variation(VariationType.MOVE_DOWN);
+                vt = new Variation(VariationType.MOVE_DOWN, size);
                 break;
             case "move_l":
                 currentSprite = move_l;
-                vt = new Variation(VariationType.MOVE_LEFT);
+                vt = new Variation(VariationType.MOVE_LEFT, size);
                 break;
             case "move_r":
                 currentSprite = move_r;
-                vt = new Variation(VariationType.MOVE_RIGHT);
+                vt = new Variation(VariationType.MOVE_RIGHT, size);
                 break;
             case "mimic_head":
                 currentSprite= mimic;
-                vt = new Variation(VariationType.MIMIC);
+                vt = new Variation(VariationType.MIMIC, size);
                 break;
             case "boots":
                 currentSprite=  boots;
-                vt = new Variation(VariationType.BOOTS);
+                vt = new Variation(VariationType.BOOTS, size);
                 break;
         }
 
     }
 
+    // called on first frame
     public override bool StartUp(Vector3Int position, ITilemap tilemap, GameObject go) 
     {   
-        // initialize fields 
-        // Sprite sprite1; above this method
-        // use methods:
-        // Sprite[] tilesAll = Resources.LoadAll<Sprite>("Sprites/TileSprites");
-        // Sprite tileRedMine = Resources.Load<Sprite>("Sprites/RedMine");
-
         return true;
     }
     // Retrieves any tile rendering data from the scripted tile.

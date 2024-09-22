@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     Vector2 movementInput;
 
     GameManager gameManager; // could just serialize this?
+    Level currentLevel;
 
     // make queues static?
     Queue<Variation> variations = new();
@@ -34,6 +35,11 @@ public class PlayerController : MonoBehaviour
         inputs.Player.Move.canceled += EndMove;
 
         gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
+        currentLevel = gameManager.getLevel();
+
+        queueSize = currentLevel.getQueueSize();
+        ghostCharges = currentLevel.getGhostCharges();
+        
     }
 
     // Update is called once per frame

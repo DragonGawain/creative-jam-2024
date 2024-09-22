@@ -71,11 +71,11 @@ public class Variation
     }
 
     // we shouldn't really be using this one
-    // public Variation(VariationType type, int size)
-    // {
-    //     this.variationType = type;
-    //     this.size = size;
-    // }
+    public Variation(VariationType type, int size)
+    {
+        this.variationType = type;
+        this.size = size;
+    }
 
     public Variation(Variation variation)
     {
