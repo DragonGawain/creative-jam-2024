@@ -77,8 +77,8 @@ public class GameManager : MonoBehaviour
 
         updateTilemaps(levelNb);
 
-        loadGround();
-        loadBackground();
+        loadLevel();
+
         
 
         activeItems.Clear();
@@ -96,6 +96,12 @@ public class GameManager : MonoBehaviour
             deathScreen.SetActive(false);
             player.transform.position = new Vector3(0.5f, 0.5f, 0);
         }
+    }
+    private void loadLevel()
+    {
+        loadGround();
+        loadBackground();
+        loadItems();
     }
 
     private static void updateTilemaps(int levelNb)
@@ -178,6 +184,11 @@ public class GameManager : MonoBehaviour
             levelBackgroundActual.RefreshTile(loc);
         }
        
+    }
+
+    private static void loadItems()
+    {
+
     }
 
     public void TriggerNextGameTick()
