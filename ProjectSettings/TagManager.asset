@@ -10,7 +10,8 @@ TagManager:
   - Queue
   - Ground
   - Death
-  - Actual_Grid
+  - MainMenu
+  - SelectMenu
   layers:
   - Default
   - TransparentFX

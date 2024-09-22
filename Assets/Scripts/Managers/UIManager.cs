@@ -10,10 +10,16 @@ public class UIManager : MonoBehaviour
 
     static GameObject queue;
 
+    GameObject MainMenu;
+
+    GameObject SelectMenu;
+
     static Dictionary<VariationType, Sprite> queueIcons = new();
     // Start is called before the first frame update
     void Awake()
     {
+        MainMenu = GameObject.FindGameObjectWithTag("MainMenu");
+        SelectMenu = GameObject.FindGameObjectWithTag("SelectMenu");
         queue = GameObject.FindWithTag("Queue");
         Sprite[] icons = Resources.LoadAll<Sprite>("queueIcons");
         foreach (Sprite icon in icons)
@@ -60,6 +66,14 @@ public class UIManager : MonoBehaviour
 
     public void OnStartButton()
     {
+        MainMenu?.SetActive(false);
+        SelectMenu?.SetActive(true);
+    }
+
+    public void OnBackButton()
+    {
+        SelectMenu?.SetActive(false);
+        MainMenu?.SetActive(true);
     }
 
     public void OnQuitButton()
