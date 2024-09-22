@@ -32,6 +32,8 @@ public class GameManager : MonoBehaviour
 
     static PlayerController player;
 
+    static GameObject playerObject;
+
     public static int windCounter = 0;
 
     [SerializeField, Range(2, 5)]
@@ -46,13 +48,19 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        DontDestroyOnLoad(gameObject);
+
         actualGrid = GameObject.Find("Actual_Grid").GetComponent<Grid>();
+
+        DontDestroyOnLoad(actualGrid);
         levelItemsActual = actualGrid.transform.Find("Actual_Items").GetComponent<Tilemap>(); 
         levelGroundActual = actualGrid.transform.Find("Actual_Ground").GetComponent<Tilemap>();
         levelBackgroundActual = actualGrid.transform.Find("Actual_Background").GetComponent<Tilemap>();
 
+        playerObject = Resources.Load<GameObject>("Other/Player");
 
-        player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+
+        // player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
         deathScreen = GameObject.FindGameObjectWithTag("Death");
 
         /*
@@ -94,6 +102,14 @@ public class GameManager : MonoBehaviour
         clearLevel();
         loadLevel();
 
+        if (GameObject.FindWithTag("Player"))
+            Destroy(GameObject.FindWithTag("Player"));
+
+        GameObject playerInstance = Instantiate(playerObject, new Vector3(0.5f, 0.5f, 0), Quaternion.identity);
+        player = playerInstance.GetComponent<PlayerController>();
+
+        
+
         activeItems.Clear();
 
         GameObject[] items = GameObject.FindGameObjectsWithTag("Item");
@@ -124,6 +140,12 @@ public class GameManager : MonoBehaviour
         levelGroundBlueprint = levelGrid.transform.Find(levelGridName + "_Ground").GetComponent<Tilemap>();
         levelBackgroundBlueprint = levelGrid.transform.Find(levelGridName + "_Background").GetComponent<Tilemap>();
         levelItemsBlueprint = levelGrid.transform.Find(levelGridName + "_Items").GetComponent<Tilemap>();
+
+        levelGroundActual.ClearAllTiles();
+        levelGroundActual.RefreshAllTiles();
+
+        levelBackgroundActual.ClearAllTiles();
+        levelBackgroundActual.RefreshAllTiles();
     }
 
     private static void loadGround()
@@ -209,6 +231,7 @@ public class GameManager : MonoBehaviour
 
             levelItemsActual.RefreshTile(loc);
         }
+
     }
 
     public void TriggerNextGameTick()
@@ -364,3 +387,4 @@ public class GameManager : MonoBehaviour
     }
 
 }
+

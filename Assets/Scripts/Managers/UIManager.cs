@@ -69,14 +69,27 @@ public class UIManager : MonoBehaviour
 
     public void OnStartButton()
     {
-        MainMenu?.SetActive(false);
-        SelectMenu?.SetActive(true);
+        MainMenu.SetActive(false);
+        SelectMenu.SetActive(true);
+    }
+
+    public void OnSelectButton(int levelNb)       
+    {
+        SceneManager.LoadScene("SampleScene");
+        StartCoroutine(WaitForJankToPass(levelNb));
+        // GameManager.StartNewLevel(levelNb);
+    
+    }
+    public void OnSelectButtonDEBUG(int levelNb)       
+    {
+        // SceneManager.LoadScene("SampleScene");
+        GameManager.StartNewLevel(levelNb);
     }
 
     public void OnBackButton()
     {
-        SelectMenu?.SetActive(false);
-        MainMenu?.SetActive(true);
+        SelectMenu.SetActive(false);
+        MainMenu.SetActive(true);
     }
 
     public void OnQuitButton()
@@ -95,5 +108,11 @@ public class UIManager : MonoBehaviour
         {
             queue.transform.GetChild(5-i).GetComponent<Image>().sprite = queueIcons[items[i]];
         }
+    }
+
+    IEnumerator WaitForJankToPass(int levelnb)
+    {
+        yield return new WaitForSeconds(1);
+        GameManager.StartNewLevel(levelnb);
     }
 }
