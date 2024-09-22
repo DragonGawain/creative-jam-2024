@@ -134,6 +134,11 @@ public class GroundTile: ITile
         return durability;
     }
 
+    public GroundTileType GetGroundTileType()
+    {
+        return groundTileType;
+    }
+
     public enum GroundTileType
     {
         ROCK,

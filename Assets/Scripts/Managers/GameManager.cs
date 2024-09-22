@@ -185,8 +185,17 @@ public class GameManager : MonoBehaviour
         NextGameTick?.Invoke();
     }
 
-    public static Vector3 Move(Vector3 pos, Vector2Int dir)
+    public static Vector3 Move(Vector3 pos, Vector2Int dir, out bool legalMove)
     {
+        legalMove = true;
+
+        // Stop player from moving when paused
+        if (paused)
+        {
+            legalMove = false;
+            return pos;
+        }
+
         // Vector3Int cellLoc = grid.WorldToCell(pos);
         // int hp = (WorldTile)tilemap.GetTile(cellLoc).decreaseDurability();
         // if (hp <= 0)
@@ -195,20 +204,55 @@ public class GameManager : MonoBehaviour
         // CellToWorld retrns bottom-left corner
 
         Vector3Int oldCellLocation = actualGrid.WorldToCell(pos);
-
-        ((GroundTile) levelGroundActual.GetTile(oldCellLocation)).decreaseDurability(walkingDamage);
-
         Vector3Int newCellLocation = actualGrid.WorldToCell(pos) + new Vector3Int(dir.x, dir.y, 0);
 
-        // Stop player from moving when paused
-        if (paused)
-            return pos;
 
-        // Whenever a player steps on lava, they Die™
-        // Debug.Log("Current level tile: " + newCellLocation);
-        Debug.Log("Current level tile: " + levelGroundActual.GetTile(new Vector3Int(0, 0)));
-        if (levelGroundActual.GetTile(newCellLocation) == null)
-            Die();
+        // Walking into level border - illegal move
+        if (((BackgroundTile)levelBackgroundActual.GetTile(newCellLocation)).GetIsWall())
+        {
+            legalMove = false;
+            return pos;
+        }
+        // Walking into a crystal
+        else if (levelGroundActual.HasTile(oldCellLocation))
+        {
+            // not in ghost mode - illegal
+            if(
+                ((GroundTile)levelGroundActual.GetTile(oldCellLocation)).GetGroundTileType() == GroundTile.GroundTileType.CRYSTAL 
+                && !player.GetIsGhost()
+            )
+            {
+                legalMove = false;
+                return pos;
+            }
+            // otherwise, it's a normal ground tile - legality checks end
+        }
+        // Trying to walk onto lava (no ground tile, background is not a wall) - kill player/mimic
+        else
+        {
+            // TODO:: add logic to detect if it's a mimic and not the player
+
+            // Whenever a player steps on lava, they Die™
+            // Debug.Log("Current level tile: " + newCellLocation);
+            // Debug.Log("Current level tile: " + levelGroundActual.GetTile(new Vector3Int(0, 0)));
+            if (levelGroundActual.GetTile(newCellLocation) == null)
+                Die();
+
+        }
+
+
+        // if in ghost mode - decrement ghost move charges
+        if (player.GetIsGhost())
+        {
+            player.DecrementGhostCharges();
+        }
+        // otherwise, not in ghost mode - deal damage to the ground
+        else
+        {
+            ((GroundTile) levelGroundActual.GetTile(oldCellLocation)).decreaseDurability(walkingDamage);
+        }
+
+
 
         if (activeItems.ContainsKey(newCellLocation))
         {
@@ -249,14 +293,42 @@ public class GameManager : MonoBehaviour
             // check if there is wind in the queue
             Queue<VariationType> varTypes = player.GetVariationTypesQueue();
 
+            Vector3 pos = new(0,0,0);
+
             if (varTypes.Contains(VariationType.WIND_UP))
-                player.transform.position = Move(player.transform.position, new Vector2Int(0, 1));
+                {
+                    pos = Move(player.transform.position, new Vector2Int(0, 1), out bool legalMove);
+                    if (legalMove)
+                        player.transform.position = pos;
+
+                    // MIMIC HAS TO MOVE!!!!
+                }
             if (varTypes.Contains(VariationType.WIND_DOWN))
-                player.transform.position = Move(player.transform.position, new Vector2Int(0, -1));
+                {
+                    pos = Move(player.transform.position, new Vector2Int(0, -1), out bool legalMove);
+                    if (legalMove)
+                        player.transform.position = pos;
+
+                    // MIMIC HAS TO MOVE!!!!
+                }
             if (varTypes.Contains(VariationType.WIND_LEFT))
-                player.transform.position = Move(player.transform.position, new Vector2Int(-1, 0));
+                {
+                    pos = Move(player.transform.position, new Vector2Int(-1, 0), out bool legalMove);
+                    if (legalMove)
+                        player.transform.position = pos;
+
+                    // MIMIC HAS TO MOVE!!!!
+                }
             if (varTypes.Contains(VariationType.WIND_RIGHT))
-                player.transform.position = Move(player.transform.position, new Vector2Int(1, 0));
+                {
+                    pos = Move(player.transform.position, new Vector2Int(1, 0), out bool legalMove);
+                    if (legalMove)
+                        player.transform.position = pos;
+
+                    // MIMIC HAS TO MOVE!!!!
+                }
+
+
         }
     }
 

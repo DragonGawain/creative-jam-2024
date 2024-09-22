@@ -81,5 +81,10 @@ public class BackgroundTile : ITile
         // don't really need this, do we?
     }
 
+    public bool GetIsWall()
+    {
+        return isWall;
+    }
+
 
 }

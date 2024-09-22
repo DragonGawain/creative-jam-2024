@@ -47,26 +47,38 @@ public class PlayerController : MonoBehaviour
     void Move(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
         movementInput = inputs.Player.Move.ReadValue<Vector2>();
+        Vector3 movePos = new(0,0,0);
+        bool legalMove = true;
         // move right
         if (movementInput.x > 0 && variationTypes.Contains(VariationType.MOVE_RIGHT))
         {
-            transform.position = GameManager.Move(transform.position, new Vector2Int(1, 0));
+            movePos = GameManager.Move(transform.position, new Vector2Int(1, 0), out legalMove);
         }
         // move left
         else if (movementInput.x < 0 && variationTypes.Contains(VariationType.MOVE_LEFT))
         {
-            transform.position = GameManager.Move(transform.position, new Vector2Int(-1, 0));
+            movePos = GameManager.Move(transform.position, new Vector2Int(-1, 0), out legalMove);
         }
         // move up
         else if (movementInput.y > 0 && variationTypes.Contains(VariationType.MOVE_UP))
         {
-            transform.position = GameManager.Move(transform.position, new Vector2Int(0, 1));
+            movePos = GameManager.Move(transform.position, new Vector2Int(0, 1), out legalMove);
         }
         // move down
         else if (movementInput.y < 0 && variationTypes.Contains(VariationType.MOVE_DOWN))
         {
-            transform.position = GameManager.Move(transform.position, new Vector2Int(0, -1));
+            movePos = GameManager.Move(transform.position, new Vector2Int(0, -1), out legalMove);
         }
+        // else
+        // {
+        //     bool legalMove = true; // sometimes I hate compilers..
+        // }
+
+
+        if (!legalMove)
+            return;
+        
+        transform.position = movePos;
 
         gameManager.TriggerNextGameTick();
     }
@@ -118,6 +130,16 @@ public class PlayerController : MonoBehaviour
             variations.Dequeue();
             variationTypes.Dequeue();
         }
+    }
+
+    public bool GetIsGhost()
+    {
+        return isGhost;
+    }
+
+    public void DecrementGhostCharges(int n = 1)
+    {
+        ghostCharges -= n;
     }
 
     // TEMP DEBUG METHODS (though like, we can just, use these I guess...)
