@@ -69,7 +69,6 @@ public class UIManager : MonoBehaviour
                 W2.SetActive(false);
                 W3.SetActive(true);
                 break;
-            default:
         }
     }
 
