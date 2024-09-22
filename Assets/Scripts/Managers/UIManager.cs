@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
-
     static GameObject queue;
 
     GameObject MainMenu;
@@ -15,6 +14,7 @@ public class UIManager : MonoBehaviour
     GameObject SelectMenu;
 
     static Dictionary<VariationType, Sprite> queueIcons = new();
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -64,7 +64,6 @@ public class UIManager : MonoBehaviour
                     break;
             }
         }
-
     }
 
     public void OnStartButton()
@@ -73,14 +72,14 @@ public class UIManager : MonoBehaviour
         SelectMenu.SetActive(true);
     }
 
-    public void OnSelectButton(int levelNb)       
+    public void OnSelectButton(int levelNb)
     {
         SceneManager.LoadScene("SampleScene");
         StartCoroutine(WaitForJankToPass(levelNb));
         // GameManager.StartNewLevel(levelNb);
-    
     }
-    public void OnSelectButtonDEBUG(int levelNb)       
+
+    public void OnSelectButtonDEBUG(int levelNb)
     {
         // SceneManager.LoadScene("SampleScene");
         GameManager.StartNewLevel(levelNb);
@@ -102,11 +101,11 @@ public class UIManager : MonoBehaviour
 
     public static void UpdateQueueVisuals(VariationType[] items)
     {
-        // set to 6 for now cause that's the length of the queue. 
+        // set to 6 for now cause that's the length of the queue.
         // Can be changed later :shrug:
         for (int i = 0; i < items.Length; i++)
         {
-            queue.transform.GetChild(5-i).GetComponent<Image>().sprite = queueIcons[items[i]];
+            queue.transform.GetChild(5 - i).GetComponent<Image>().sprite = queueIcons[items[i]];
         }
     }
 

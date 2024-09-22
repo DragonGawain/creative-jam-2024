@@ -12,6 +12,7 @@ TagManager:
   - Death
   - MainMenu
   - SelectMenu
+  - Mimic
   layers:
   - Default
   - TransparentFX

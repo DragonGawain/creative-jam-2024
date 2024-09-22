@@ -25,7 +25,6 @@ public class PlayerController : MonoBehaviour
 
     int ghostCharges = 6;
 
-
     // Start is called before the first frame update
     void Awake()
     {
@@ -39,7 +38,6 @@ public class PlayerController : MonoBehaviour
 
         queueSize = currentLevel.getQueueSize();
         ghostCharges = currentLevel.getGhostCharges();
-        
     }
 
     // Update is called once per frame
@@ -53,7 +51,7 @@ public class PlayerController : MonoBehaviour
     void Move(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
     {
         movementInput = inputs.Player.Move.ReadValue<Vector2>();
-        Vector3 movePos = new(0,0,0);
+        Vector3 movePos = new(0, 0, 0);
         bool legalMove = true;
         // move right
         if (movementInput.x > 0 && variationTypes.Contains(VariationType.MOVE_RIGHT))
@@ -75,23 +73,18 @@ public class PlayerController : MonoBehaviour
         {
             movePos = GameManager.Move(transform.position, new Vector2Int(0, -1), out legalMove);
         }
-        // else
-        // {
-        //     bool legalMove = true; // sometimes I hate compilers..
-        // }
 
+        Debug.Log("Legal move? " + legalMove);
 
         if (!legalMove)
             return;
-        
+
         transform.position = movePos;
 
         gameManager.TriggerNextGameTick();
     }
 
-    void EndMove(UnityEngine.InputSystem.InputAction.CallbackContext ctx)
-    {
-    }
+    void EndMove(UnityEngine.InputSystem.InputAction.CallbackContext ctx) { }
 
     void OnDestroy()
     {
@@ -110,10 +103,21 @@ public class PlayerController : MonoBehaviour
                 variationTypes.Enqueue(Variation.GetAlternateTypes()[variation.GetVariationType()]);
         }
 
+        // temp storage for things getting removed from the queue
+        Variation vari;
+        VariationType variT;
+
         // if the queue if overflowing, dequeue until the queue is no longer overfull
         if (variations.Count > queueSize)
             for (int i = variations.Count; i > queueSize; i--)
-                Dequeue();
+            {
+                Dequeue(out vari, out variT);
+                // All of that is to be able to easily check if the last piece of a mimic was removed
+                if (variT == VariationType.MIMIC)
+                {
+                    GameManager.DespawnMimic(vari.GetMimicIndex());
+                }
+            }
 
         // After we're done with the queue operations, let's manipulate the visuals!
         UIManager.UpdateQueueVisuals(variationTypes.ToArray());
@@ -129,13 +133,10 @@ public class PlayerController : MonoBehaviour
         return variationTypes;
     }
 
-    public void Dequeue(int n = 1)
+    public void Dequeue(out Variation vari, out VariationType variT)
     {
-        for (int i = 0; i < n; i++)
-        {
-            variations.Dequeue();
-            variationTypes.Dequeue();
-        }
+        vari = variations.Dequeue();
+        variT = variationTypes.Dequeue();
     }
 
     public bool GetIsGhost()
@@ -146,6 +147,11 @@ public class PlayerController : MonoBehaviour
     public void DecrementGhostCharges(int n = 1)
     {
         ghostCharges -= n;
+    }
+
+    public void SetQueueSize(int q)
+    {
+        queueSize = q;
     }
 
     // TEMP DEBUG METHODS (though like, we can just, use these I guess...)

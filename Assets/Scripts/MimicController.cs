@@ -11,48 +11,49 @@ public class MimicController : MonoBehaviour
 
     Vector2 movementInput;
 
+    int mimicIndex;
+
     void Awake()
     {
+        // snap to grid
+        transform.position = GameManager.AlignToGrid(transform.position);
         // subscribe to game manager event
         GameManager.NextGameTick += Move;
         gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
-        playerController = GameObject.FindWithTag("PlayerController").GetComponent<PlayerController>();
+        playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    void Update() { }
 
     // TODO:: gotta change this cause I changed the GameManager.Move() logic
-    void Move() {
+    void Move()
+    {
         movementInput = playerController.GetMovementInput();
 
-        Vector3 pos = new(0,0,0);
+        Vector3 pos = new(0, 0, 0);
         bool legalMove = true;
 
         // move right
         if (movementInput.x > 0)
         {
-            pos = GameManager.Move(transform.position, new Vector2Int(-1,0), out legalMove);
+            pos = GameManager.Move(transform.position, new Vector2Int(-1, 0), out legalMove);
         }
         // move left
         else if (movementInput.x < 0)
         {
-            pos = GameManager.Move(transform.position, new Vector2Int(1,0), out legalMove);
+            pos = GameManager.Move(transform.position, new Vector2Int(1, 0), out legalMove);
         }
         // move up
         else if (movementInput.y > 0)
         {
-            pos = GameManager.Move(transform.position, new Vector2Int(0,-1), out legalMove);
+            pos = GameManager.Move(transform.position, new Vector2Int(0, -1), out legalMove);
         }
         // move down
         else if (movementInput.y < 0)
         {
-            pos = GameManager.Move(transform.position, new Vector2Int(0,1), out legalMove);
+            pos = GameManager.Move(transform.position, new Vector2Int(0, 1), out legalMove);
         }
-   
 
         if (legalMove)
             transform.position = pos;
@@ -61,5 +62,10 @@ public class MimicController : MonoBehaviour
     void OnDestroy()
     {
         GameManager.NextGameTick -= Move;
+    }
+
+    public void SetMimicIndex(int n)
+    {
+        mimicIndex = n;
     }
 }
