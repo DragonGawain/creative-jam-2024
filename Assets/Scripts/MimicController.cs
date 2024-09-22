@@ -28,6 +28,7 @@ public class MimicController : MonoBehaviour
         transform.position = GameManager.AlignToGrid(transform.position);
         // subscribe to game manager event
         GameManager.NextGameTick += Move;
+        GameManager.AltNextGameTick += Move;
         gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
         playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
 
