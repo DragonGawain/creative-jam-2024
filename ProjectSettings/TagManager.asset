@@ -15,6 +15,9 @@ TagManager:
   - Mimic
   - CreditMenu
   - AudioManager
+  - W1
+  - W2
+  - W3
   layers:
   - Default
   - TransparentFX

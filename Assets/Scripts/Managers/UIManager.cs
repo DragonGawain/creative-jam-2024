@@ -52,6 +52,8 @@ public class UIManager : MonoBehaviour
 
     public static void IncrementWind(int n)
     {
+        if (W1 == null)
+            return;
         switch (n)
         {
             case 0:
@@ -77,9 +79,9 @@ public class UIManager : MonoBehaviour
         queueIcons.Clear();
         
         queue = GameObject.FindWithTag("Queue");
-        W1 = queue.transform.parent.GetChild(3).gameObject;
-        W2 = queue.transform.parent.GetChild(4).gameObject;
-        W3 = queue.transform.parent.GetChild(5).gameObject;
+        W1 = GameObject.FindWithTag("W1");
+        W2 = GameObject.FindWithTag("W2");
+        W3 = GameObject.FindWithTag("W3");
         IncrementWind(0);
         Sprite[] icons = Resources.LoadAll<Sprite>("queueIcons");
         foreach (Sprite icon in icons)
