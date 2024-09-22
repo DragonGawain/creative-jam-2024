@@ -13,7 +13,7 @@ public class ItemTile: ITile
     Sprite mimic;
     Sprite boots;
 
-    VariationType vt;
+    Variation vt;
 
     public void Initialize()
     {
@@ -63,43 +63,43 @@ public class ItemTile: ITile
         {
             case "wind_u":
                 currentSprite = wind_u;   
-                vt = VariationType.WIND_UP;
+                vt = new Variation(VariationType.WIND_UP);
                 break;
             case "wind_d":
                 currentSprite = wind_d;
-                vt = VariationType.WIND_DOWN;
+                vt = new Variation(VariationType.WIND_DOWN);
                 break;
             case "wind_l":
                 currentSprite = wind_l;
-                vt = VariationType.WIND_LEFT;
+                vt = new Variation(VariationType.WIND_LEFT);
                 break;
             case "wind_r":
                 currentSprite = wind_r;
-                vt = VariationType.WIND_RIGHT;
+                vt = new Variation(VariationType.WIND_RIGHT);
                 break;
             case "move_u":
                 currentSprite = move_u;
-                vt = VariationType.MOVE_UP;
+                vt = new Variation(VariationType.MOVE_UP);
                 break;
             case "move_d":
                 currentSprite = move_d;
-                vt = VariationType.MOVE_DOWN;
+                vt = new Variation(VariationType.MOVE_DOWN);
                 break;
             case "move_l":
                 currentSprite = move_l;
-                vt = VariationType.MOVE_LEFT;
+                vt = new Variation(VariationType.MOVE_LEFT);
                 break;
             case "move_r":
                 currentSprite = move_r;
-                vt = VariationType.MOVE_RIGHT;
+                vt = new Variation(VariationType.MOVE_RIGHT);
                 break;
             case "mimic_head":
                 currentSprite= mimic;
-                vt = VariationType.MIMIC;
+                vt = new Variation(VariationType.MIMIC);
                 break;
             case "boots":
                 currentSprite=  boots;
-                vt = VariationType.BOOTS;
+                vt = new Variation(VariationType.BOOTS);
                 break;
         }
 
@@ -126,6 +126,11 @@ public class ItemTile: ITile
     public override void RefreshTile(Vector3Int position, ITilemap tilemap) 
     {
         // don't really need this, do we?
+    }
+
+    public Variation GetVariation()
+    {
+        return vt;
     }
 
 }
