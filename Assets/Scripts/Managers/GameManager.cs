@@ -130,6 +130,7 @@ public class GameManager : MonoBehaviour
 
 
         NextGameTick += IncrementWind;
+        UIManager.IncrementWind(windCounter);
 
         Variation.InitializeVariationSprites();
     }

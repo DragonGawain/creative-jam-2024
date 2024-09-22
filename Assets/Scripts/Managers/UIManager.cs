@@ -54,17 +54,17 @@ public class UIManager : MonoBehaviour
     {
         switch (n)
         {
-            case 1:
+            case 0:
                 W1.SetActive(true);
                 W2.SetActive(false);
                 W3.SetActive(false);
                 break;
-            case 2:
+            case 1:
                 W1.SetActive(false);
                 W2.SetActive(true);
                 W3.SetActive(false);
                 break;
-            case 3:
+            case 2:
                 W1.SetActive(false);
                 W2.SetActive(false);
                 W3.SetActive(true);
@@ -81,6 +81,7 @@ public class UIManager : MonoBehaviour
         W1 = queue.transform.parent.GetChild(3).gameObject;
         W2 = queue.transform.parent.GetChild(4).gameObject;
         W3 = queue.transform.parent.GetChild(5).gameObject;
+        IncrementWind(0);
         Sprite[] icons = Resources.LoadAll<Sprite>("queueIcons");
         foreach (Sprite icon in icons)
         {
